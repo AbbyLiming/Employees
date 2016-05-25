@@ -198,6 +198,7 @@ public class ExpressListFragment extends UIFragment implements ExpressListFragme
                     transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("express", elist.get(position));
+                    bundle.putString("packageID",packageID);
                     fragment.setArguments(bundle);
                     transaction.replace(R.id.fragment_container_layout, fragment);
                     transaction.addToBackStack("ExpressListFragment");

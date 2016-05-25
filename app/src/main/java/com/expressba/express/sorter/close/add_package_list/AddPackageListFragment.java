@@ -3,7 +3,6 @@ package com.expressba.express.sorter.close.add_package_list;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -96,7 +95,7 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             IDlist.add(input.getText().toString());
-                            adapter=new AddPackageListAdapter(getActivity(),IDlist);
+                            adapter = new AddPackageListAdapter(getActivity(), IDlist);
                             listView.setAdapter(adapter);
                             presenter.loadIntoPackage(DpackageID, input.getText().toString(), EXPRESS);//调用presenter
                         }
@@ -104,7 +103,7 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             IDlist.add(input.getText().toString());
-                            adapter=new AddPackageListAdapter(getActivity(),IDlist);
+                            adapter = new AddPackageListAdapter(getActivity(), IDlist);
                             listView.setAdapter(adapter);
                             presenter.loadIntoPackage(DpackageID, input.getText().toString(), PACKAGE);//调用presenter
                         }
@@ -146,6 +145,7 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
                 break;
         }
     }
+
     @Override
     public void onExpressListFail(String errorMessage) {
         Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();

@@ -163,7 +163,9 @@
     <string name="base_url">http://182.254.214.97:8080/ExTrace_Server</string>
 
     <string name="login_send">/REST/Domain/login</string>
+    <string name="login_send_employee">/REST/Domain/loginByEmployee</string>
     <string name="register_send">/REST/Domain/register</string>
+    <string name="register_send_employee">/REST/Domain/newEmployee</string>
     <string name="address_get_send">/REST/Misc/getSendAddress/customertel/{tel}</string><!--get方法，后面跟手机号-->
     <string name="address_get_get">/REST/Misc/getAccAddress/customertel/{tel}</string><!--get方法，后面跟手机号-->
     <string name="address_get_province">/REST/Misc/getAllProvince</string><!--获取全国省份-->

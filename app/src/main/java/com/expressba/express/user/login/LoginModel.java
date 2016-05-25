@@ -6,5 +6,5 @@ package com.expressba.express.user.login;
 public interface LoginModel {
     void startLogin(String tel, String password);
 
-    void startRegister(String tel, String password, String name);
+    public void startRegister(String tel, String password, String name,int job,String jobText,int status,int outletsId);
 }

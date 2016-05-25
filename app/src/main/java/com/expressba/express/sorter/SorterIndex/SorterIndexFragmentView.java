@@ -9,4 +9,6 @@ public interface SorterIndexFragmentView {
     void onSuccess(PackageInfo packageInfo);
 
     void onError(String errorMessage);
+
+    void onSuccess();
 }

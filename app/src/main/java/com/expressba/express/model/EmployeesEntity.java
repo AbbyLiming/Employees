@@ -1,12 +1,17 @@
 package com.expressba.express.model;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import java.io.Serializable;
 
 /**
  * Created by violet on 2016/5/3.
  */
 public class EmployeesEntity implements Serializable {
+    private boolean loginState = false;
     private int id;
     private String name;
     private String password;
@@ -17,8 +22,14 @@ public class EmployeesEntity implements Serializable {
     private int outletsId;
     private String sendPackageId;
     private String recvPackageId;
+    private SharedPreferences spf;
+    private Context context;
+    private String token;
 
-    public EmployeesEntity() {
+
+    public EmployeesEntity(Context context) {
+        this.context = context;
+        spf = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public EmployeesEntity(int id, String name, String password, String telephone, Integer job, String jobText, Integer status, int outletsId, String sendPackageId, String recvPackageId) {
@@ -34,6 +45,73 @@ public class EmployeesEntity implements Serializable {
         this.recvPackageId = recvPackageId;
     }
 
+    public void setPassword(String value) {
+        SharedPreferences.Editor editor = spf.edit();
+        editor.putString("password", value);
+        editor.apply();
+        this.password = value;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getPasswordFromPreference() {
+        return spf.getString("password", password);
+    }
+
+    public void setName(String value) {
+        SharedPreferences.Editor editor = spf.edit();
+        editor.putString("name", value);
+        editor.apply();
+        this.name = value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getNameFromPreference() {
+        return spf.getString("name", "");
+    }
+
+    public boolean getLoginState() {
+        return loginState;
+    }
+
+    public boolean getLoginStateFromPreference() {
+        return spf.getBoolean("loginState", false);
+    }
+
+    public void setLoginState(boolean loginState) {
+        SharedPreferences.Editor editor;
+        if (!loginState) {
+            editor = spf.edit();
+            editor.putBoolean("loginState", false);
+            editor.remove("name");
+            editor.remove("telephone");
+            editor.remove("password");
+            editor.apply();
+        }
+        this.loginState = loginState;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public String getTelephoneFromPreference() {
+        return spf.getString("telephone", "");
+    }
+
+    public void setTelephone(String telephone) {
+        SharedPreferences.Editor editor = spf.edit();
+        editor.putString("telephone", telephone);
+        editor.apply();
+        this.telephone = telephone;
+    }
+
+
     public int getId() {
         return id;
     }
@@ -42,32 +120,13 @@ public class EmployeesEntity implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getToken() {
+        return token;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setToken(String token) {
+        this.token = token;
     }
-
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
 
     public Integer getJob() {
         return job;
@@ -122,43 +181,6 @@ public class EmployeesEntity implements Serializable {
         this.recvPackageId = recvPackageId;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        EmployeesEntity that = (EmployeesEntity) o;
-
-        if (id != that.id) return false;
-        if (outletsId != that.outletsId) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (telephone != null ? !telephone.equals(that.telephone) : that.telephone != null) return false;
-        if (job != null ? !job.equals(that.job) : that.job != null) return false;
-        if (jobText != null ? !jobText.equals(that.jobText) : that.jobText != null) return false;
-        if (status != null ? !status.equals(that.status) : that.status != null) return false;
-        if (sendPackageId != null ? !sendPackageId.equals(that.sendPackageId) : that.sendPackageId != null)
-            return false;
-        if (recvPackageId != null ? !recvPackageId.equals(that.recvPackageId) : that.recvPackageId != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (telephone != null ? telephone.hashCode() : 0);
-        result = 31 * result + (job != null ? job.hashCode() : 0);
-        result = 31 * result + (jobText != null ? jobText.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + outletsId;
-        result = 31 * result + (sendPackageId != null ? sendPackageId.hashCode() : 0);
-        result = 31 * result + (recvPackageId != null ? recvPackageId.hashCode() : 0);
-        return result;
-    }
 
     @Override
     public String toString() {

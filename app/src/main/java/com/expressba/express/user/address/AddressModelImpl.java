@@ -25,7 +25,7 @@ public class AddressModelImpl extends VolleyHelper implements AddressModel {
         super(context);
         this.activity = context;
         this.presenter = presenter;
-        telephone = ((MyApplication)context.getApplication()).getUserInfo().getTelephone();
+        telephone = ((MyApplication)context.getApplication()).getEmployeesInfo().getTelephone();
         sendAddressUrl = context.getResources().getString(R.string.base_url)+context.getResources().getString(R.string.address_get_send);
         getAddressUrl = context.getResources().getString(R.string.base_url)+context.getResources().getString(R.string.address_get_get);
     }

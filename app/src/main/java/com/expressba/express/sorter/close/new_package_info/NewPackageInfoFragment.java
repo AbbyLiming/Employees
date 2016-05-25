@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.baidu.trace.T;
 import com.expressba.express.main.MyApplication;
 import com.expressba.express.main.UIFragment;
+import com.expressba.express.map.MyHistoryTrace;
 import com.expressba.express.model.EmployeesEntity;
 import com.expressba.express.model.PackageInfo;
 import com.expressba.express.model.UserAddress;
@@ -42,6 +44,7 @@ public class NewPackageInfoFragment extends UIFragment implements NewPackageInfo
     private NewPackageInfoPresenter presenter1;
     private static int fromID, toID, EmployeesID;
     private static String packageID;
+    private EditText toWhereID;
 
 
     @Override
@@ -55,6 +58,11 @@ public class NewPackageInfoFragment extends UIFragment implements NewPackageInfo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.packageinfo, container, false);
+        if(((MyApplication)getActivity().getApplication()).getEmployeesInfo().getLoginState()==false)
+        {
+            Toast.makeText(getActivity(),"请登录",Toast.LENGTH_SHORT).show();
+        }
+
         back = (ImageButton) view.findViewById(R.id.top_bar_left_img);
         title = (TextView) view.findViewById(R.id.top_bar_center_text);
         from = (TextView) view.findViewById(R.id.package_from);
@@ -62,6 +70,7 @@ public class NewPackageInfoFragment extends UIFragment implements NewPackageInfo
         to = (TextView) view.findViewById(R.id.package_to);
         open = (Button) view.findViewById(R.id.open);
         open.setText("创建");
+        toWhereID=(EditText)view.findViewById(R.id.package_to);
         employeesId = (TextView) view.findViewById(R.id.EmployeesID);
         employeesname = (TextView) view.findViewById(R.id.EmployeesName);
         time = (TextView) view.findViewById(R.id.closetime);
@@ -96,6 +105,7 @@ public class NewPackageInfoFragment extends UIFragment implements NewPackageInfo
             @Override
             public void onClick(View v) {
                     //创建包裹
+                toID=Integer.valueOf(toWhereID.getText().toString());
                     presenter1.newPackage(fromID, toID, EmployeesID, 1);
                     //Toast.makeText(getActivity(),"请选取目的地站点地址",Toast.LENGTH_SHORT).show();
 
@@ -115,6 +125,10 @@ public class NewPackageInfoFragment extends UIFragment implements NewPackageInfo
         ID.setText(packageInfo.getId());
         time.setText(packageInfo.getCloseTime());
         packageID = packageInfo.getId();
+        MyHistoryTrace MyTrace =new MyHistoryTrace();
+        MyTrace.startTraceClient(getActivity(),String.valueOf(((MyApplication)getActivity().getApplication()).getEmployeesInfo().getId()));
+      /*  MyHistoryTrace MyTrace = new MyHistoryTrace();
+        MyTrace.startTraceClient(getActivity(),packageID);*/
         Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
                 android.R.drawable.btn_star).setTitle("确认").setMessage(
                 "创建成功包裹ID为" + packageID + "是否继续添加包裹或快件?").setPositiveButton("添加", new DialogInterface.OnClickListener() {

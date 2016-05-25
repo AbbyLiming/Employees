@@ -1,15 +1,12 @@
 package com.expressba.express.sorter.Expressupdate;
 
-import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.ListFragment;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,7 +37,8 @@ public class ExpressUpdateFragment extends UIFragment implements ExpressUpdateFr
         if (getArguments().getString("ID") != null) {
             ID = getArguments().getString("ID");
             presenter.getExpressInfoByID(ID);
-        } else getFragmentManager().popBackStack();
+        }
+        else getFragmentManager().popBackStack();
         View view = inflater.inflate(R.layout.express_send_edit, container, false);
         title = (TextView) view.findViewById(R.id.top_bar_center_text);
         title.setText("快件信息");

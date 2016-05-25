@@ -69,7 +69,7 @@ public class MyHistoryTrace {
         initOnStartTraceListener();
 
         //开启轨迹服务
-        GetAllTrace.client.startTrace(trace, startTraceListener);
+
 
         //设置位置采集和打包周期
         GetAllTrace.client.setInterval(gatherInterval, packInterval);

@@ -25,6 +25,7 @@ import cn.smssdk.SMSSDK;
 
 import com.expressba.express.main.UIFragment;
 import com.expressba.express.myelement.MyFragmentManager;
+import com.expressba.express.sorter.SorterIndex.RegisterFragment;
 import com.expressba.express.toolbox.CheckInput;
 import com.expressba.express.toolbox.CountDown;
 import com.expressba.express.R;
@@ -85,8 +86,8 @@ public class LoginFragment extends UIFragment implements LoginFragmentView,View.
                 isLogin = true;
                 //------------------------test
                 if(telEdit.getText().toString().equals("")) {
-                    tel = "12345678909";
-                    password = "123456";
+                    tel = "fff";
+                    password = "fff";
                     loginModel.startLogin(tel, password);
                     break;
                 }else {
@@ -99,15 +100,16 @@ public class LoginFragment extends UIFragment implements LoginFragmentView,View.
                 }
                 break;
             case R.id.register_button:
-                if(hasUserNameEdit) {
+                toRegister();
+               /* if(hasUserNameEdit) {
                     isLogin = false;
                     if (checkInput()) {
                         //SMSSDK.submitVerificationCode(COUNTRY_CODE,tel,verifyCode);
-                        loginModel.startRegister(tel,password,name);
+                        //loginModel.startRegister(tel,password,name);
                     }
                 }else {
                     addUserNameEdit();
-                }
+                }*/
                 break;
             case R.id.login_tel_verify_button:
                 tel = telEdit.getText().toString();
@@ -121,6 +123,10 @@ public class LoginFragment extends UIFragment implements LoginFragmentView,View.
             default:
                 break;
         }
+    }
+
+    private void toRegister() {
+        MyFragmentManager.turnFragment(LoginFragment.class,RegisterFragment.class,null,getFragmentManager());
     }
 
     /**
@@ -171,7 +177,7 @@ public class LoginFragment extends UIFragment implements LoginFragmentView,View.
                             if (isLogin) {//判断是注册还是登录通过用户姓名输入框的存在性
                                 loginModel.startLogin(tel, password);
                             } else {
-                                loginModel.startRegister(tel, password, name);
+                                //loginModel.startRegister(tel, password, name);
                             }
                         } else {
                             showToast("验证失败，请重新获取验证码");

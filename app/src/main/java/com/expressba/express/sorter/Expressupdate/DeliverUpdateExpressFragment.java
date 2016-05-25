@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.trace.T;
 import com.expressba.express.main.UIFragment;
 import com.expressba.express.model.ExpressEntity;
 import com.expressba.express.net.HttpResponseParam;
@@ -38,33 +39,36 @@ public class DeliverUpdateExpressFragment extends UIFragment implements DeliverU
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.deliver_update_express_first, container, false);
         presenter = new DeliverUpdateExpressPresenterImpl(getActivity(), this);
-        presenter1=new UploadImagePresenterImpl(this,getActivity());
+        presenter1 = new UploadImagePresenterImpl(this, getActivity());
+
+        View view = inflater.inflate(R.layout.deliver_update_express_first, container, false);
+
         ID = (TextView) view.findViewById(R.id.deliver_update_express_first_ID);
         weight = (EditText) view.findViewById(R.id.deliver_update_express_first_weight);
         insufee = (EditText) view.findViewById(R.id.deliver_update_express_first_insufee);
         transfee = (EditText) view.findViewById(R.id.deliver_update_express_first_transfee);
         submit = (Button) view.findViewById(R.id.submit_deliver);
-        startCamera=(ImageView)view.findViewById(R.id.startCamera);
+        startCamera = (ImageView) view.findViewById(R.id.startCamera);
         startCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startCamera();
             }
         });
+
         if (getArguments() != null) {
             ID.setText(getArguments().getString("ID").toString());
+        } else {
+            Toast.makeText(getActivity(), "请输入id", Toast.LENGTH_SHORT).show();
         }
-        else getFragmentManager().popBackStack();
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (weight.getText() == null || insufee.getText() == null || transfee.getText() == null) {
                     Toast.makeText(getActivity(), "请将信息补充完整", Toast.LENGTH_SHORT).show();
 
-                } else
-                {
+                } else {
                     ExpressEntity expressEntity = new ExpressEntity();
                     expressEntity.setId(ID.getText().toString());
                     expressEntity.setWeight(Float.parseFloat(weight.getText().toString()));
@@ -78,11 +82,11 @@ public class DeliverUpdateExpressFragment extends UIFragment implements DeliverU
         return view;
     }
 
-    public void startCamera()
-    {
-        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent,1);
+    public void startCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, 1);
     }
+
     @Override
     public void onFail(String errorMessage) {
         Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
@@ -110,14 +114,12 @@ public class DeliverUpdateExpressFragment extends UIFragment implements DeliverU
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode== Activity.RESULT_OK)
-        {
-            if(requestCode==1)
-            {
-                Bundle bundle=data.getExtras();
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {
+                Bundle bundle = data.getExtras();
                 //图片二进制流
-                Bitmap bitmap=(Bitmap)bundle.get("data");
-                presenter1.uploadImage(ID.toString(),1,bitmap);
+                Bitmap bitmap = (Bitmap) bundle.get("data");
+                presenter1.uploadImage(ID.toString(), 1, bitmap);
                 startCamera.setImageBitmap(bitmap);
             }
         }

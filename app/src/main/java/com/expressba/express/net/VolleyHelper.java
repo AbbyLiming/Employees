@@ -19,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.expressba.express.main.MyApplication;
-import com.expressba.express.model.UserInfo;
+import com.expressba.express.model.EmployeesEntity;
 
 /**
  * Created by chao on 2016/4/17.
@@ -34,19 +34,19 @@ public abstract class VolleyHelper {
     private String token;
     private Boolean isLogin = false;
 
-    public VolleyHelper(Activity context){
+    public VolleyHelper(Activity context) {
         this.context = context;
         requestQueue = Volley.newRequestQueue(context);
-        UserInfo userInfo = ((MyApplication)context.getApplication()).getUserInfo();
-        isLogin = userInfo.getLoginState();
-        if(isLogin){
-            token = userInfo.getToken();
+        EmployeesEntity employeesEntity = ((MyApplication) context.getApplication()).getEmployeesInfo();
+        isLogin = employeesEntity.getLoginState();
+        if (isLogin) {
+            token = employeesEntity.getToken();
         }
     }
 
-    public void doJson(String url,int method,JSONObject jsonObject){
+    public void doJson(String url, int method, JSONObject jsonObject) {
         //添加token
-        url = initUrl(url,method,jsonObject);
+        url = initUrl(url, method, jsonObject);
         showProgressDialog();
         JsonObjectRequest objectRequest = new JsonObjectRequest(method, url, jsonObject, new Response.Listener<JSONObject>() {
             @Override
@@ -58,16 +58,16 @@ public abstract class VolleyHelper {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 hideProgressDialog();
-                onError(VolleyErrorHelper.getMessage(volleyError,context));
+                onError(VolleyErrorHelper.getMessage(volleyError, context));
             }
         });
         requestQueue.add(objectRequest);
     }
 
-    public void doJsonArray(String url,Integer postOrGet,JSONArray jsonArray){
-        url = initUrl(url,postOrGet,null);
+    public void doJsonArray(String url, Integer postOrGet, JSONArray jsonArray) {
+        url = initUrl(url, postOrGet, null);
         showProgressDialog();
-        JsonArrayRequest arrayRequest = new JsonArrayRequest(postOrGet,url,jsonArray,new Response.Listener<JSONArray>() {
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(postOrGet, url, jsonArray, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray jsonArray) {
                 hideProgressDialog();
@@ -77,7 +77,7 @@ public abstract class VolleyHelper {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 hideProgressDialog();
-                onError(VolleyErrorHelper.getMessage(volleyError,context));
+                onError(VolleyErrorHelper.getMessage(volleyError, context));
             }
         });
         requestQueue.add(arrayRequest);
@@ -86,11 +86,11 @@ public abstract class VolleyHelper {
 
     /**
      * 请求图片的方法
+     *
      * @param url
      * @param bitmap
      */
-    public void doImage(String url,Bitmap bitmap){
-
+    public void doImage(String url, Bitmap bitmap) {
         showProgressDialog();
         Listener<Bitmap> listener = new Listener<Bitmap>() {
             @Override
@@ -98,28 +98,27 @@ public abstract class VolleyHelper {
                 hideProgressDialog();
             }
         };
-
         ImageRequest imageRequest = new ImageRequest(url, listener, bitmap.getWidth(), bitmap.getHeight(), ImageView.ScaleType.FIT_XY, bitmap.getConfig(), new ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 hideProgressDialog();
-                onError(VolleyErrorHelper.getMessage(error,context));
+                onError(VolleyErrorHelper.getMessage(error, context));
             }
         });
-
         requestQueue.add(imageRequest);
     }
 
     /**
      * url加密数据token带上-----其实没用
+     *
      * @param url
      * @param method
      * @param jsonObject
      * @return
      */
-    private String initUrl(String url,int method ,JSONObject jsonObject){
-        if(isLogin) {
-            if(method == GET) {
+    private String initUrl(String url, int method, JSONObject jsonObject) {
+        if (isLogin) {
+            if (method == GET) {
                 if (url.charAt(url.length() - 1) == '/') {
                     url = url + token;
                 } else {
@@ -131,8 +130,8 @@ public abstract class VolleyHelper {
     }
 
 
-    private void showProgressDialog(){
-        if(isShowProgress) {
+    private void showProgressDialog() {
+        if (isShowProgress) {
             if (dialog == null) {
                 dialog = new ProgressDialog(context);
                 dialog.setMessage("请稍后..");
@@ -144,8 +143,8 @@ public abstract class VolleyHelper {
     }
 
 
-    private void hideProgressDialog(){
-        if(isShowProgress) {
+    private void hideProgressDialog() {
+        if (isShowProgress) {
             if (dialog != null) {
                 dialog.hide();
             }
@@ -153,6 +152,7 @@ public abstract class VolleyHelper {
     }
 
     public abstract void onDataReceive(Object jsonOrArray);
+
     public abstract void onError(String errorMessage);
 
 

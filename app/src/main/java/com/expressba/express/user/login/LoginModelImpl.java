@@ -1,20 +1,22 @@
 package com.expressba.express.user.login;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.baidu.trace.OnEntityListener;
 import com.expressba.express.main.MyApplication;
+import com.expressba.express.map.GetAllTrace;
+import com.expressba.express.map.MyHistoryTrace;
 import com.expressba.express.net.VolleyHelper;
 import com.expressba.express.R;
 
 /**
- * Created by chao on 2016/4/16.
+ * Created by ming on 2016/4/16.
  */
-public class LoginModelImpl extends VolleyHelper implements LoginModel{
+public class LoginModelImpl extends VolleyHelper implements LoginModel {
 
     private LoginFragmentView loginView;
     private String loginUrl;
@@ -23,18 +25,23 @@ public class LoginModelImpl extends VolleyHelper implements LoginModel{
     private String telephone;
     private String mD5Password;
     private String name;
-    private Integer userID;
+    private int job;
+    private String jobText;
+    private int status;
+    private int outletsId;
     private Activity activity;
     private MyApplication application;//保存用户登录状态到全局appliction中
-
     private boolean isLogin;
-    public LoginModelImpl(Activity activity,LoginFragmentView loginView) {
+    public LoginModelImpl(Activity activity, LoginFragmentView loginView) {
         super(activity);
         application = (MyApplication) activity.getApplication();
         this.activity = activity;
         this.loginView = loginView;
-        loginUrl = activity.getResources().getString(R.string.base_url)+activity.getResources().getString(R.string.login_send);
-        registerUrl = activity.getResources().getString(R.string.base_url)+activity.getResources().getString(R.string.register_send);
+
+        //loginUrl = "http://192.168.1.102:8080" + activity.getResources().getString(R.string.login_send_employee);
+        loginUrl = activity.getResources().getString(R.string.base_url) + activity.getResources().getString(R.string.login_send_employee);
+        //registerUrl="http://192.168.1.102:8080"+activity.getResources().getString(R.string.register_send_employee);
+        registerUrl = activity.getResources().getString(R.string.base_url) + activity.getResources().getString(R.string.register_send_employee);
     }
 
     @Override
@@ -45,15 +52,14 @@ public class LoginModelImpl extends VolleyHelper implements LoginModel{
         this.telephone = tel;
         //tel = MD5.getMD5(tel);
         //password = MD5.getMD5(password);
-
         this.mD5Password = password;
-
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("telephone",tel);
-            jsonObject.put("password",password);
-
-            doJson(url,VolleyHelper.POST,jsonObject);
+           // jsonObject.put("telephone", tel);
+            //jsonObject.put("password", password);
+            jsonObject.put("telephone", "11111111111");
+            jsonObject.put("password","11111111111");
+            doJson(url, VolleyHelper.POST, jsonObject);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,23 +68,30 @@ public class LoginModelImpl extends VolleyHelper implements LoginModel{
     }
 
     @Override
-    public void startRegister(String tel, String password, String name) {
+    public void startRegister(String tel, String password, String name, int job, String jobText, int status, int outletsId) {
         isLogin = false;
         String url = registerUrl;
         //加密传输
         this.telephone = tel;
         this.name = name;
+        this.job = job;
+        this.jobText = jobText;
+        this.outletsId = outletsId;
+        this.status = status;
         //tel = MD5.getMD5(tel);
         //password = MD5.getMD5(password);
         this.mD5Password = password;
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("telephone",tel);
-            jsonObject.put("password",password);
-            jsonObject.put("name",name);
-
-            doJson(url,VolleyHelper.POST,jsonObject);
+            jsonObject.put("telephone", tel);
+            jsonObject.put("password", password);
+            jsonObject.put("name", name);
+            jsonObject.put("job", job);
+            jsonObject.put("jobText", jobText);
+            jsonObject.put("status", status);
+            jsonObject.put("outletsId", outletsId);
+            doJson(url, VolleyHelper.POST, jsonObject);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,31 +100,34 @@ public class LoginModelImpl extends VolleyHelper implements LoginModel{
     }
 
     @Override
-    public void onDataReceive(Object object) {
-        JSONObject jsonObject = (JSONObject) object;
-        if(isLogin) {
+    public void onDataReceive(Object jsonOrArray) {
+        JSONObject jsonObject = (JSONObject) jsonOrArray;
+        if (isLogin) {
             try {
                 String loginState = jsonObject.getString("loginstate");
                 switch (loginState) {
-                    case "true":
+                    case "ture":
                         this.name = jsonObject.getString("name");//登陆成功后存储必要用户信息
-                        application.getUserInfo().setId(jsonObject.getInt("id"));
-                        application.getUserInfo().setName(this.name);
-                        application.getUserInfo().setTelephone(telephone);
-                        application.getUserInfo().setPassword(mD5Password);
-                        application.getUserInfo().setToken(jsonObject.getString("token"));
-
-                        application.getUserInfo().setLoginState(true);
-                        application.getUserInfo().setToken(jsonObject.getString("token"));
+                        application.getEmployeesInfo().setId(jsonObject.getInt("id"));
+                       // application.getEmployeesInfo().setId(7);
+                        application.getEmployeesInfo().setName(this.name);
+                        application.getEmployeesInfo().setTelephone(telephone);
+                        application.getEmployeesInfo().setPassword(mD5Password);
+                        application.getEmployeesInfo().setJob(jsonObject.getInt("job"));
+                        application.getEmployeesInfo().setJobText(jsonObject.getString("jobText"));
+                        application.getEmployeesInfo().setStatus(jsonObject.getInt("status"));
+                        application.getEmployeesInfo().setOutletsId(jsonObject.getInt("outletsId"));
+                        application.getEmployeesInfo().setLoginState(true);
+                        application.getEmployeesInfo().setToken(jsonObject.getString("token"));
                         loginView.showToast("登陆成功");
                         loginView.onback();
                         break;
                     case "false":
-                        application.getUserInfo().setLoginState(false);
+                        application.getEmployeesInfo().setLoginState(false);
                         loginView.showToast("登陆失败，请重试");
                         break;
                     default:
-                        application.getUserInfo().setLoginState(false);
+                        application.getEmployeesInfo().setLoginState(false);
                         loginView.showToast("登陆失败，请重试");
                         break;
                 }
@@ -119,29 +135,34 @@ public class LoginModelImpl extends VolleyHelper implements LoginModel{
                 e.printStackTrace();
                 loginView.showToast("异常，请重试");
             }
-        }else{
+        } else {
             try {
-                String registerState = jsonObject.getString("registerstate");
+                String registerState = jsonObject.getString("newEmployee");
                 switch (registerState) {
                     case "true":
-                        application.getUserInfo().setLoginState(true);
-                        application.getUserInfo().setName(name);
-                        application.getUserInfo().setPassword(mD5Password);
-                        application.getUserInfo().setTelephone(telephone);
-                        application.getUserInfo().setId(jsonObject.getInt("id"));//---!!!
-                        application.getUserInfo().setToken(jsonObject.getString("token"));
+                        application.getEmployeesInfo().setLoginState(true);
+                        application.getEmployeesInfo().setName(name);
+                        application.getEmployeesInfo().setPassword(mD5Password);
+                        application.getEmployeesInfo().setTelephone(telephone);
+                        application.getEmployeesInfo().setJob(job);
+                        application.getEmployeesInfo().setJobText(jobText);
+                        application.getEmployeesInfo().setStatus(status);
+                        application.getEmployeesInfo().setOutletsId(outletsId);
+                        application.getEmployeesInfo().setId(jsonObject.getInt("id"));
+                        application.getEmployeesInfo().setToken(jsonObject.getString("token"));
                         loginView.showToast("注册成功");
+                        MyHistoryTrace MyTrace =new MyHistoryTrace();
+                        GetAllTrace.client.addEntity(MyTrace.SERVICE_ID,String.valueOf(jsonObject.getInt("id")), null, new OnEntityListener() {
+                            @Override
+                            public void onRequestFailedCallback(String s) {
+                                //Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         loginView.onback();
                         break;
                     case "false":
-                        application.getUserInfo().setLoginState(false);
-                        application.getUserInfo().setLoginState(false);
+                       // application.getEmployeesInfo().setLoginState(false);
                         loginView.showToast("注册失败");
-                        break;
-                    case "deny":
-                        application.getUserInfo().setLoginState(false);
-                        application.getUserInfo().setLoginState(false);
-                        loginView.showToast("手机号已经被注册，请登录");
                         break;
                     default:
                         break;

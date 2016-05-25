@@ -1,7 +1,6 @@
 package com.expressba.express.sorter.ReceiverInfo;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -16,9 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.expressba.express.main.UIFragment;
+import com.expressba.express.map.GetAllTrace;
+import com.expressba.express.map.MyHistoryTrace;
 import com.expressba.express.model.ExpressInfo;
 import com.expressba.express.R;
-import com.expressba.express.sorter.Expressupdate.DeliverUpdateExpressFragment;
 import com.expressba.express.sorter.Expressupdate.DeliverUpdateExpressFragmentView;
 import com.expressba.express.sorter.Expressupdate.UploadImagePresenter;
 import com.expressba.express.sorter.Expressupdate.UploadImagePresenterImpl;
@@ -26,7 +26,7 @@ import com.expressba.express.sorter.Expressupdate.UploadImagePresenterImpl;
 /**
  * Created by 黎明 on 2016/5/3.
  */
-public class ReceiverInfoFragment extends UIFragment implements ReceiverInfoFragmentView, View.OnClickListener ,DeliverUpdateExpressFragmentView{
+public class ReceiverInfoFragment extends UIFragment implements ReceiverInfoFragmentView, View.OnClickListener, DeliverUpdateExpressFragmentView {
     private ImageButton back;
     private UploadImagePresenter presenter1;
     private TextView title;
@@ -35,6 +35,8 @@ public class ReceiverInfoFragment extends UIFragment implements ReceiverInfoFrag
     private ReceiverInfoPresenter presenter;
     private static String ID;
     private ImageView startCamera;
+    private static String packageID;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.receiver_info, container, false);
@@ -48,7 +50,7 @@ public class ReceiverInfoFragment extends UIFragment implements ReceiverInfoFrag
         receiver_info_tel = (TextView) view.findViewById(R.id.receiver_info_tel);
         receiver_info_send = (Button) view.findViewById(R.id.receiver_info_send);
         back.setOnClickListener(this);
-        startCamera=(ImageView)view.findViewById(R.id.startCamera);
+        startCamera = (ImageView) view.findViewById(R.id.startCamera);
         startCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +59,7 @@ public class ReceiverInfoFragment extends UIFragment implements ReceiverInfoFrag
         });
         receiver_info_send.setOnClickListener(this);
         if (getArguments() != null) {
+            packageID=getArguments().getString("packageID");
             ExpressInfo expressInfo = (ExpressInfo) getArguments().getParcelable("express");
             receiver_info_add.setText(expressInfo.getRadd());
             receiver_info_addinfo.setText(expressInfo.getRaddinfo());
@@ -65,6 +68,7 @@ public class ReceiverInfoFragment extends UIFragment implements ReceiverInfoFrag
             ID = expressInfo.getID();
         } else
             getFragmentManager().popBackStack();
+
         return view;
     }
 
@@ -84,28 +88,41 @@ public class ReceiverInfoFragment extends UIFragment implements ReceiverInfoFrag
     public void onFail(String errorMessage) {
         Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
     }
-    public void startCamera()
-    {
-        Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent,1);
+
+    public void startCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, 1);
     }
+
     @Override
     public void onSuccess() {
         Toast.makeText(getActivity(), "签收成功", Toast.LENGTH_LONG).show();
+      /*  MyHistoryTrace MyTrace = new MyHistoryTrace();
+        GetAllTrace.client.addEntity(MyTrace.SERVICE_ID,packageID, null, new OnEntityListener() {
+            //把快递id加到轨迹索引
+            @Override
+            public void onRequestFailedCallback(String s) {
+                Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        MyTrace.startTraceClient(getActivity(), ID);
+        //开启轨迹上传
+        */
         receiver_info_send.setVisibility(View.INVISIBLE);
+
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode== Activity.RESULT_OK)
-        {
-            if(requestCode==1)
-            {
-                Bundle bundle=data.getExtras();
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {
+                Bundle bundle = data.getExtras();
                 //图片二进制流
-                Bitmap bitmap=(Bitmap)bundle.get("data");
-                presenter1=new UploadImagePresenterImpl(this,getActivity());
-                presenter1.uploadImage(ID,2,bitmap);
+                Bitmap bitmap = (Bitmap) bundle.get("data");
+                presenter1 = new UploadImagePresenterImpl(this, getActivity());
+                presenter1.uploadImage(ID, 2, bitmap);
                 startCamera.setImageBitmap(bitmap);
             }
         }

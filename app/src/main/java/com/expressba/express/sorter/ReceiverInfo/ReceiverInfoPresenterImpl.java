@@ -9,6 +9,8 @@ import com.expressba.express.main.MyApplication;
 import com.expressba.express.net.VolleyHelper;
 import com.expressba.express.R;
 
+import java.util.Date;
+
 /**
  * Created by 黎明 on 2016/5/3.
  */
@@ -19,7 +21,7 @@ public class ReceiverInfoPresenterImpl extends VolleyHelper implements ReceiverI
     public ReceiverInfoPresenterImpl(Activity activity, ReceiverInfoFragmentView fragmentView) {
         super(activity);
         this.fragmentView = fragmentView;
-        //turl = activity.getResources().getString(R.string.base_url) + activity.getResources().getString(R.string.getExpressInfo_ById);
+        turl = activity.getResources().getString(R.string.base_url) + "/REST/Domain/updateExpressFree";
         url = turl;
     }
 
@@ -31,9 +33,12 @@ public class ReceiverInfoPresenterImpl extends VolleyHelper implements ReceiverI
 
     @Override
     public void ReceiveExpress(String ID) {
-        url += ID ;
+        JSONObject jsonObject = new JSONObject();
         try {
-            doJson(url, VolleyHelper.GET, null);
+            jsonObject.put("id",ID);
+            Date outtime=new Date();
+            jsonObject.put("outTime",outtime);
+            doJson(url, VolleyHelper.POST,jsonObject);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
