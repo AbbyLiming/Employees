@@ -124,7 +124,7 @@ public class MeFragment extends UIFragment implements MeView,View.OnClickListene
      */
     @Override
     public void loginOut() {
-        ((MyApplication)getActivity().getApplication()).getUserInfo().setLoginState(false);
+        ((MyApplication)getActivity().getApplication()).getEmployeesInfo().setLoginState(false);
         /*LoginFragment loginFragment = new LoginFragment();
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

@@ -17,6 +17,7 @@ public class ExpressUpdatePresenterImpl extends VolleyHelper implements ExpressU
     private ExpressUpdateFragmentView fragmentView;
     String url, turl;
 
+
     public ExpressUpdatePresenterImpl(Activity activity, ExpressUpdateFragmentView fragmentview) {
         super(activity);
         this.fragmentView = fragmentview;

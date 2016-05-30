@@ -58,14 +58,13 @@ public class ExpressListModelImpl extends VolleyHelper implements ExpressListMod
                 p.setRtel(object1.getString("rtel"));
                 p.setRaddinfo(object1.getString("raddinfo"));
                 p.setRadd(object1.getString("radd"));
-                String gettime = object1.getString("getTime").substring(0, 10);
-                p.setGetTime(gettime);
+                //String gettime = object1.getString("getTime").substring(0, 10);
+                //p.setGetTime(gettime);
                 list.add(p);
             } catch (JSONException e) {
                 e.printStackTrace();
                 ExpressListPresenter.onExpressListFail("error");
             }
-
         }
         ExpressListPresenter.onSuccess(list);
     }

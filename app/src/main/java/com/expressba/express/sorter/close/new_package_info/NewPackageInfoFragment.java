@@ -125,10 +125,6 @@ public class NewPackageInfoFragment extends UIFragment implements NewPackageInfo
         ID.setText(packageInfo.getId());
         time.setText(packageInfo.getCloseTime());
         packageID = packageInfo.getId();
-        MyHistoryTrace MyTrace =new MyHistoryTrace();
-        MyTrace.startTraceClient(getActivity(),String.valueOf(((MyApplication)getActivity().getApplication()).getEmployeesInfo().getId()));
-      /*  MyHistoryTrace MyTrace = new MyHistoryTrace();
-        MyTrace.startTraceClient(getActivity(),packageID);*/
         Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
                 android.R.drawable.btn_star).setTitle("确认").setMessage(
                 "创建成功包裹ID为" + packageID + "是否继续添加包裹或快件?").setPositiveButton("添加", new DialogInterface.OnClickListener() {

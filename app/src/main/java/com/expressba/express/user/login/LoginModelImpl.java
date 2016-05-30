@@ -1,17 +1,20 @@
 package com.expressba.express.user.login;
 
 import android.app.Activity;
+import android.util.Log;
+import android.widget.Toast;
 
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.baidu.trace.OnEntityListener;
 import com.expressba.express.main.MyApplication;
-import com.expressba.express.map.GetAllTrace;
 import com.expressba.express.map.MyHistoryTrace;
 import com.expressba.express.net.VolleyHelper;
 import com.expressba.express.R;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by ming on 2016/4/16.
@@ -32,11 +35,14 @@ public class LoginModelImpl extends VolleyHelper implements LoginModel {
     private Activity activity;
     private MyApplication application;//保存用户登录状态到全局appliction中
     private boolean isLogin;
+    private MyHistoryTrace myHistoryTrace;
+
     public LoginModelImpl(Activity activity, LoginFragmentView loginView) {
         super(activity);
         application = (MyApplication) activity.getApplication();
         this.activity = activity;
         this.loginView = loginView;
+        myHistoryTrace = new MyHistoryTrace();
 
         //loginUrl = "http://192.168.1.102:8080" + activity.getResources().getString(R.string.login_send_employee);
         loginUrl = activity.getResources().getString(R.string.base_url) + activity.getResources().getString(R.string.login_send_employee);
@@ -55,10 +61,8 @@ public class LoginModelImpl extends VolleyHelper implements LoginModel {
         this.mD5Password = password;
         JSONObject jsonObject = new JSONObject();
         try {
-           // jsonObject.put("telephone", tel);
-            //jsonObject.put("password", password);
-            jsonObject.put("telephone", "11111111111");
-            jsonObject.put("password","11111111111");
+             jsonObject.put("telephone", tel);
+            jsonObject.put("password", password);
             doJson(url, VolleyHelper.POST, jsonObject);
 
         } catch (Exception e) {
@@ -106,10 +110,10 @@ public class LoginModelImpl extends VolleyHelper implements LoginModel {
             try {
                 String loginState = jsonObject.getString("loginstate");
                 switch (loginState) {
-                    case "ture":
+                    case "true":
                         this.name = jsonObject.getString("name");//登陆成功后存储必要用户信息
                         application.getEmployeesInfo().setId(jsonObject.getInt("id"));
-                       // application.getEmployeesInfo().setId(7);
+                        // application.getEmployeesInfo().setId(7);
                         application.getEmployeesInfo().setName(this.name);
                         application.getEmployeesInfo().setTelephone(telephone);
                         application.getEmployeesInfo().setPassword(mD5Password);
@@ -151,17 +155,30 @@ public class LoginModelImpl extends VolleyHelper implements LoginModel {
                         application.getEmployeesInfo().setId(jsonObject.getInt("id"));
                         application.getEmployeesInfo().setToken(jsonObject.getString("token"));
                         loginView.showToast("注册成功");
-                        MyHistoryTrace MyTrace =new MyHistoryTrace();
-                        GetAllTrace.client.addEntity(MyTrace.SERVICE_ID,String.valueOf(jsonObject.getInt("id")), null, new OnEntityListener() {
+
+                        myHistoryTrace.addEntity(String.valueOf(jsonObject.getString("id")), new MyHistoryTrace.EntityListenerInterface() {
                             @Override
-                            public void onRequestFailedCallback(String s) {
-                                //Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT).show();
+                            public void addEntityCallBack(String s) {
+                                Pattern pattern = Pattern.compile("\\{\"status\":([0-9]*),");
+                                Matcher matcher = pattern.matcher(s);
+                                if (matcher.find()) {
+                                    Integer status = Integer.valueOf(matcher.group(1));
+                                    if (status == 0) {
+                                        loginView.onback();
+                                    } else {
+                                        Log.e("addentityError", s);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void requestFailedCallBack(String s) {
+
                             }
                         });
-                        loginView.onback();
                         break;
                     case "false":
-                       // application.getEmployeesInfo().setLoginState(false);
+                        // application.getEmployeesInfo().setLoginState(false);
                         loginView.showToast("注册失败");
                         break;
                     default:

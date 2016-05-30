@@ -4,8 +4,6 @@ import android.app.Activity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.expressba.express.main.MyApplication;
 import com.expressba.express.net.VolleyHelper;
 import com.expressba.express.R;
 
@@ -21,7 +19,7 @@ public class ReceiverInfoPresenterImpl extends VolleyHelper implements ReceiverI
     public ReceiverInfoPresenterImpl(Activity activity, ReceiverInfoFragmentView fragmentView) {
         super(activity);
         this.fragmentView = fragmentView;
-        turl = activity.getResources().getString(R.string.base_url) + "/REST/Domain/updateExpressFree";
+        turl = activity.getResources().getString(R.string.base_url) + "/REST/Domain/qiSiWoLeDeQianShou";
         url = turl;
     }
 
@@ -33,22 +31,18 @@ public class ReceiverInfoPresenterImpl extends VolleyHelper implements ReceiverI
 
     @Override
     public void ReceiveExpress(String ID) {
-        JSONObject jsonObject = new JSONObject();
+        Date time=new Date();
+        url+="/expressId/"+ID+"/outTime/"+time;
         try {
-            jsonObject.put("id",ID);
-            Date outtime=new Date();
-            jsonObject.put("outTime",outtime);
-            doJson(url, VolleyHelper.POST,jsonObject);
+            doJson(url,VolleyHelper.GET,null);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            url = turl;
         }
     }
 
     @Override
     public void onDataReceive(Object jsonOrArray) {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = (JSONObject) jsonOrArray;
         try {
             int state = jsonObject.getInt("state");
             if (state == 1)

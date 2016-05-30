@@ -13,7 +13,6 @@ import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Browser;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,11 +57,7 @@ public class SorterIndexFragment extends UIFragment implements SorterIndexFragme
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sorter_index_fragment, container, false);
         myApplication = (MyApplication) getActivity().getApplication();
-      final  EmployeesEntity employeesEntity = myApplication.getEmployeesInfo();
-      //  TYPE = SORTER;
-      /*  if(employeesEntity.getJob()==null) {
-            Toast.makeText(getActivity(),"请登录",Toast.LENGTH_SHORT).show();
-        }*/
+        final EmployeesEntity employeesEntity = myApplication.getEmployeesInfo();
         transaction = getFragmentManager().beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         cameraButton = (ImageButton) view.findViewById(R.id.index_top_bar_camera);
@@ -104,7 +99,6 @@ public class SorterIndexFragment extends UIFragment implements SorterIndexFragme
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-
                                         presenter.CreatPackage(0, 1, EmployeesID, 0);
                                         //揽收包fromID设为0 isSorter为0
                                     }
@@ -180,24 +174,39 @@ public class SorterIndexFragment extends UIFragment implements SorterIndexFragme
                     bundle.putString("packageID", result);
 
                     MyFragmentManager.turnFragment(SorterIndexFragment.class, PackageListFragment.class, bundle2, getFragmentManager());
-                }else  if(TYPE== DRIVER)
-                {
-                    LoadPackageIntoDriverPresenter presenter1=new LoadPackageDriverPresenterImpl(getActivity(),this);
+                } else if (TYPE == DRIVER) {
+                    LoadPackageIntoDriverPresenter presenter1 = new LoadPackageDriverPresenterImpl(getActivity(), this);
                     presenter1.loadPackageIntoDriver(result);
                 }
-
             }
         }
     }
 
     private void initResult() {
-        TYPE=((MyApplication) getActivity().getApplication()).getEmployeesInfo().getJob();
+        TYPE = ((MyApplication) getActivity().getApplication()).getEmployeesInfo().getJob();
     }
 
     @Override
-    public void onSuccess(final PackageInfo packageInfo) {
-        MyHistoryTrace MyTrace =new MyHistoryTrace();
-       // MyTrace.startTraceClient(getActivity(),String.valueOf(((MyApplication)getActivity().getApplication()).getEmployeesInfo().getId()));
+    public void onSuccess(int type,final PackageInfo packageInfo) {
+        //快递员打包成功，将application中加入packageID
+        if(type==0)
+        ((MyApplication)getActivity().getApplication()).getEmployeesInfo().setRecvPackageId(packageInfo.getId());
+        else if(type==1)
+            ((MyApplication)getActivity().getApplication()).getEmployeesInfo().setSendPackageId(packageInfo.getId());
+        MyHistoryTrace MyTrace = new MyHistoryTrace();
+        MyTrace.startTraceClient(getActivity(), String.valueOf(((MyApplication) getActivity().getApplication()).getEmployeesInfo().getId()), new MyHistoryTrace.StartTraceInterface() {
+            @Override
+            public void startTraceCallBack(int stateCode, String message) {
+                if(stateCode==0)
+                    Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void startTracePush(byte arg0, String arg1) {
+
+            }
+        });
+
         Dialog dialog = new AlertDialog.Builder(getActivity()).setIcon(
                 android.R.drawable.btn_star).setTitle("通知").setMessage(
                 "创建包裹成功，包裹ID为" + packageInfo.getId() + "是否向包裹中添加快件？").setPositiveButton("是",
@@ -212,7 +221,7 @@ public class SorterIndexFragment extends UIFragment implements SorterIndexFragme
                 }).setNegativeButton("否", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                MyFragmentManager.turnFragment(SorterIndexFragment.class, SorterIndexFragment.class, null, getFragmentManager());
+                getFragmentManager().popBackStack();
             }
         }).create();
         dialog.show();
@@ -231,13 +240,31 @@ public class SorterIndexFragment extends UIFragment implements SorterIndexFragme
 
     @Override
     public void onSuccess() {
-        Toast.makeText(getActivity(),"success",Toast.LENGTH_SHORT).show();
+        //司机上传轨迹
+       MyHistoryTrace MyTrace = new MyHistoryTrace();
+        MyTrace.startTraceClient(getActivity(), String.valueOf(((MyApplication) getActivity().getApplication()).getEmployeesInfo().getId()), new MyHistoryTrace.StartTraceInterface() {
+            @Override
+            public void startTraceCallBack(int stateCode, String message) {
+                if(stateCode==0)
+                    Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void startTracePush(byte arg0, String arg1) {
+
+            }
+        });
+
+
     }
-    public void init()
-    {
-        if(((MyApplication)getActivity().getApplication()).getEmployeesInfo().getLoginState()==true)
+
+    public void init() {
+        if (((MyApplication) getActivity().getApplication()).getEmployeesInfo().getLoginState() == true) {
             presenter = new SorterIndexPresenterImpl(getActivity(), this);
-            EmployeesID=((MyApplication) getActivity().getApplication()).getEmployeesInfo().getId();
+            EmployeesEntity employeesEntity=((MyApplication) getActivity().getApplication()).getEmployeesInfo();
+            TYPE = employeesEntity.getJob();
+            EmployeesID = employeesEntity.getId();
+        }
     }
 }
 

@@ -40,10 +40,8 @@ public class OpenPackagePresenterImpl extends VolleyHelper implements OpenPackag
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if (state == 0) {
+        if (state == 1) {
             fragmentView.OpenSuccess();
-        } else if (state == 1) {
-            fragmentView.onFail("error");
         }
     }
 

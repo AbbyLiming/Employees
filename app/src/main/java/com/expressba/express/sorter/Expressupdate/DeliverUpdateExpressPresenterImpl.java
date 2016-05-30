@@ -5,7 +5,6 @@ import android.app.Activity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.expressba.express.main.MyApplication;
 import com.expressba.express.model.ExpressEntity;
 import com.expressba.express.net.VolleyHelper;
 import com.expressba.express.R;
@@ -35,7 +34,6 @@ public class DeliverUpdateExpressPresenterImpl extends VolleyHelper implements D
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -57,7 +55,11 @@ public class DeliverUpdateExpressPresenterImpl extends VolleyHelper implements D
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        doJson(url, VolleyHelper.POST, jsonObject);
+        try {
+            doJson(url, VolleyHelper.POST, jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

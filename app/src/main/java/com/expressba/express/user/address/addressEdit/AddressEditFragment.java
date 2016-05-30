@@ -91,10 +91,10 @@ public class AddressEditFragment extends UIFragment implements View.OnClickListe
             //设置初始省份地址，北京，初始字段设置
             userAddress = new UserAddress();
             userAddress.setRank(1);
-            userAddress.setCustomerid(myApplication.getUserInfo().getId());
+            userAddress.setCustomerid(myApplication.getEmployeesInfo().getId());
             userAddress.setProvince("北京市");
             //-------!!!
-            userAddress.setCustomerid(myApplication.getUserInfo().getId());
+            userAddress.setCustomerid(myApplication.getEmployeesInfo().getId());
         }else {
             if(editWhat == ADDRESS_UPDATE_RECEIVE) {
                 ((TextView) view.findViewById(R.id.top_bar_center_text)).setText("修改收货地址");

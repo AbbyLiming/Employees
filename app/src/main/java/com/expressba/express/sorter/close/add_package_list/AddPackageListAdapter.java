@@ -1,6 +1,8 @@
 package com.expressba.express.sorter.close.add_package_list;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +12,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import com.expressba.express.model.ExpressEntity;
+import com.expressba.express.model.ExpressInfo;
 import com.expressba.express.model.PackageInfo;
 import com.expressba.express.R;
+import com.expressba.express.sorter.ReceiverInfo.ReceiverInfoFragment;
 
 /**
  * Created by 黎明 on 2016/4/17.
@@ -48,7 +53,7 @@ public class AddPackageListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         viewHolder view = null;
         if (convertView == null) {
             view = new viewHolder();
@@ -63,6 +68,9 @@ public class AddPackageListAdapter extends BaseAdapter {
         view.info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ReceiverInfoFragment fragment = new ReceiverInfoFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("express", (ExpressInfo)elist.get(position));
 
             }
         });

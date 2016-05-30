@@ -15,6 +15,7 @@ import com.expressba.express.R;
 public class SorterIndexPresenterImpl extends VolleyHelper implements SorterIndexPresenter {
     private SorterIndexFragmentView fragmentview;
     String url;
+    private int type;
 
     public SorterIndexPresenterImpl(Activity activity, SorterIndexFragmentView sorterindexfragmentView) {
         super(activity);
@@ -31,7 +32,7 @@ public class SorterIndexPresenterImpl extends VolleyHelper implements SorterInde
         try {
             packageInfo.setCloseTime(jsonObject.getString("closeTime"));
             packageInfo.setId(jsonObject.getString("id"));
-            fragmentview.onSuccess(packageInfo);
+            fragmentview.onSuccess(type,packageInfo);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -44,6 +45,7 @@ public class SorterIndexPresenterImpl extends VolleyHelper implements SorterInde
 
     @Override
     public void CreatPackage(int fromID, int toID, int EmployeesID, int isSorter) {
+        this.type=fromID;
         url += "fromID/" + fromID + "/toID/" + toID + "/employeesID/" + EmployeesID + "/isSorter/" + isSorter;
         try {
             JSONObject object = new JSONObject();

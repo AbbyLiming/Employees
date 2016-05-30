@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'debug'
+            keyPassword '123456'
+            storeFile file('D:/大三上/express_debug.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 19
     buildToolsVersion "23.0.3"
-
     defaultConfig {
         applicationId "com.expressba.express"
         minSdkVersion 19
@@ -15,6 +22,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
     compileOptions {
@@ -30,7 +40,7 @@ repositories{
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     //compile 'com.android.support:appcompat-v7:19'
     compile files('libs/Gson/gson-2.2.4.jar')

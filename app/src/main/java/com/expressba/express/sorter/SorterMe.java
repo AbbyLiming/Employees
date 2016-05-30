@@ -1,31 +1,44 @@
 package com.expressba.express.sorter;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.expressba.express.myelement.MyFragmentManager;
 import com.expressba.express.main.MyApplication;
 import com.expressba.express.main.UIFragment;
 import com.expressba.express.myelement.MyFragmentManager;
+import com.expressba.express.sorter.ReceiverInfo.ReceiverInfoFragmentView;
+import com.expressba.express.sorter.ReceiverInfo.ReceiverInfoPresenter;
+import com.expressba.express.sorter.ReceiverInfo.ReceiverInfoPresenterImpl;
+import com.expressba.express.sorter.SorterIndex.LoadPackageDriverPresenterImpl;
+import com.expressba.express.sorter.SorterIndex.LoadPackageIntoDriverPresenter;
 import com.expressba.express.sorter.close.add_package_list.AddPackageListFragment;
+import com.expressba.express.sorter.open.ep_search.package_list.PackageListFragment;
+import com.expressba.express.sorter.open.package_search.PackageSearchFragment;
 import com.expressba.express.sorter.work.SearchWorkFragment;
 import com.expressba.express.R;
 import com.expressba.express.user.address.AddressFragment;
 import com.expressba.express.user.password.ChangePasswordFragment;
 import com.expressba.express.user.telephone.ChangeTelFragment;
+import com.expressba.express.zxing.activity.CaptureActivity;
 
 /**
  * Created by 黎明 on 2016/5/4.
  */
-public class SorterMe extends UIFragment implements SorterMeFragmentView, View.OnClickListener {
+public class SorterMe extends UIFragment implements SorterMeFragmentView, View.OnClickListener,ReceiverInfoFragmentView {
+
 
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
-
+    private ReceiverInfoPresenter presenter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sorter_me_fragment, container, false);
@@ -101,7 +114,7 @@ public class SorterMe extends UIFragment implements SorterMeFragmentView, View.O
         transaction.addToBackStack("mefragment");
         transaction.commit();*/
 
-        MyFragmentManager.turnFragment(SorterMe.class,AddressFragment.class,bundle,getFragmentManager());
+        MyFragmentManager.turnFragment(SorterMe.class, AddressFragment.class, bundle, getFragmentManager());
     }
 
     /**
@@ -127,7 +140,7 @@ public class SorterMe extends UIFragment implements SorterMeFragmentView, View.O
         transaction.addToBackStack("mefragment");
         transaction.commit();*/
 
-        MyFragmentManager.turnFragment(SorterMe.class,ChangePasswordFragment.class,null,getFragmentManager());
+        MyFragmentManager.turnFragment(SorterMe.class, ChangePasswordFragment.class, null, getFragmentManager());
     }
 
     /**
@@ -150,7 +163,7 @@ public class SorterMe extends UIFragment implements SorterMeFragmentView, View.O
      */
     @Override
     public void loginOut() {
-        ((MyApplication) getActivity().getApplication()).getUserInfo().setLoginState(false);
+        ((MyApplication) getActivity().getApplication()).getEmployeesInfo().setLoginState(false);
         getFragmentManager().popBackStack();
         transaction.commit();
     }
@@ -167,7 +180,7 @@ public class SorterMe extends UIFragment implements SorterMeFragmentView, View.O
         transaction.addToBackStack("SorterMe");
         transaction.commit();
 
-        MyFragmentManager.turnFragment(SorterMe.class,AddPackageListFragment.class,bundle,getFragmentManager());
+        MyFragmentManager.turnFragment(SorterMe.class, AddPackageListFragment.class, bundle, getFragmentManager());
     }
 
     /**
@@ -175,7 +188,7 @@ public class SorterMe extends UIFragment implements SorterMeFragmentView, View.O
      */
     @Override
     public void toAboutSoftFragment() {
-
+        startActivityForResult(new Intent(getActivity(), CaptureActivity.class), 0);
     }
 
     /**
@@ -209,6 +222,25 @@ public class SorterMe extends UIFragment implements SorterMeFragmentView, View.O
         transaction.addToBackStack("SorterMe");
         transaction.commit();
     }
+
+    @Override
+    public void onActivityResult(final int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 0) {
+                //签收
+              //获得expressID
+             presenter=new ReceiverInfoPresenterImpl(getActivity(),this);
+            }
+        }
+    }
+    @Override
+    public void onSuccess() {
+        Toast.makeText(getActivity(),"签收成功",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFail(String errorMessage) {
+        Toast.makeText(getActivity(),errorMessage,Toast.LENGTH_SHORT).show();
+    }
+
 }
-
-

@@ -13,10 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.expressba.express.main.UIFragment;
-import com.expressba.express.map.GetAllTrace;
-import com.expressba.express.map.MyHistoryTrace;
 import com.expressba.express.model.ExpressInfo;
 import com.expressba.express.R;
 import com.expressba.express.sorter.Expressupdate.DeliverUpdateExpressFragmentView;
@@ -61,6 +58,10 @@ public class ReceiverInfoFragment extends UIFragment implements ReceiverInfoFrag
         if (getArguments() != null) {
             packageID=getArguments().getString("packageID");
             ExpressInfo expressInfo = (ExpressInfo) getArguments().getParcelable("express");
+            if(expressInfo.getGetTime()!=null)
+            {
+                receiver_info_send.setVisibility(View.INVISIBLE);
+            }
             receiver_info_add.setText(expressInfo.getRadd());
             receiver_info_addinfo.setText(expressInfo.getRaddinfo());
             receiver_info_name.setText(expressInfo.getRname());
@@ -68,7 +69,6 @@ public class ReceiverInfoFragment extends UIFragment implements ReceiverInfoFrag
             ID = expressInfo.getID();
         } else
             getFragmentManager().popBackStack();
-
         return view;
     }
 
@@ -97,18 +97,6 @@ public class ReceiverInfoFragment extends UIFragment implements ReceiverInfoFrag
     @Override
     public void onSuccess() {
         Toast.makeText(getActivity(), "签收成功", Toast.LENGTH_LONG).show();
-      /*  MyHistoryTrace MyTrace = new MyHistoryTrace();
-        GetAllTrace.client.addEntity(MyTrace.SERVICE_ID,packageID, null, new OnEntityListener() {
-            //把快递id加到轨迹索引
-            @Override
-            public void onRequestFailedCallback(String s) {
-                Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        MyTrace.startTraceClient(getActivity(), ID);
-        //开启轨迹上传
-        */
         receiver_info_send.setVisibility(View.INVISIBLE);
 
     }
