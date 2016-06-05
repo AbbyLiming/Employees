@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.expressba.express.main.UIFragment;
+import com.expressba.express.myelement.MyDialog;
+import com.expressba.express.myelement.MyFragmentManager;
 import com.expressba.express.sorter.Expressupdate.ExpressUpdateFragmentView;
 import com.expressba.express.sorter.Expressupdate.ExpressUpdatePresenter;
 import com.expressba.express.sorter.Expressupdate.ExpressUpdatePresenterImpl;
@@ -52,9 +54,6 @@ import com.expressba.express.R;
 public class AddPackageListFragment extends UIFragment implements PackageListFragmentView, ExpressListFragmentView, AddPackageListFragmentView,ExpressUpdateFragmentView ,View.OnClickListener {
     private AddPackageListPresenter presenter;      //调用其load
     private ListView listView;                      //listView显示内容list
-
-
-
     private static String DpackageID;               //default包裹ID
     private static String ExpressID;
     private static List IDlist = new ArrayList();     //IDlist
@@ -63,7 +62,6 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
     private Button open;                            //拆包
     private AddPackageListAdapter adapter;         //适配器
     private static int PACKAGE = 1, EXPRESS = 0;
-
     private PackageListPresenter PackageListPresenter;  //searchPackagebypackageid
     private ExpressListPresenter ExpressListPresenter;  //searchExpressBypackageid
     private OpenPackagePresenter OpenPackagePresenter;  //openpackage
@@ -96,6 +94,11 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
     }
 
     @Override
+    protected void onBack() {
+        MyFragmentManager.popFragment(AddPackageListFragment.class,SorterIndexFragment.class,null,getFragmentManager());
+        // getFragmentManager().popBackStack();
+    }
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.index_top_bar_message:
@@ -106,11 +109,17 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
                             "请选择快件或包裹").setPositiveButton("快件", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            IDlist.add(input.getText().toString());
+                            adapter = new AddPackageListAdapter(getActivity(), IDlist);
+                            listView.setAdapter(adapter);
                             presenter.loadIntoPackage(DpackageID, input.getText().toString(), EXPRESS);//调用presenter
                         }
                     }).setNegativeButton("包裹", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            IDlist.add(input.getText().toString());
+                            adapter = new AddPackageListAdapter(getActivity(), IDlist);
+                            listView.setAdapter(adapter);
                             presenter.loadIntoPackage(DpackageID, input.getText().toString(), PACKAGE);//调用presenter
                         }
                     }).create();
@@ -118,7 +127,7 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
                 }
                 break;
             case R.id.index_top_bar_camera:
-                Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
+             Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
                         android.R.drawable.btn_star).setTitle("添加类型").setMessage(
                         "请选择快件或包裹").setPositiveButton("快件", new DialogInterface.OnClickListener() {
                     @Override
@@ -134,7 +143,23 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
                 dialog1.show();
                 break;
             case R.id.add_open:
-                Dialog dialog = new AlertDialog.Builder(getActivity()).setIcon(
+                MyDialog dialog = new MyDialog(getActivity());
+                MyDialog.SureButton button = new MyDialog.SureButton() {
+                    @Override
+                    public void sureButtonDo() {
+                        OpenPackagePresenter.onOpenPackage(DpackageID);
+                    }
+                };
+                MyDialog.NoButton button1 = new MyDialog.NoButton() {
+                    @Override
+                    public void noButtonDo() {
+                        getFragmentManager().popBackStack();
+                    }
+                };
+                dialog.setSureButton(button);
+                dialog.setNoButton(button1);
+                dialog.showDialogWithSureAndNo( "确认拆包？", "确认", "取消");
+             /*   Dialog dialog = new AlertDialog.Builder(getActivity()).setIcon(
                         android.R.drawable.btn_star).setTitle("确认信息").setMessage(
                         "确认拆包？").setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
@@ -147,7 +172,8 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).create();
-                dialog.show();
+                dialog.show();*/
+
                 break;
         }
     }
@@ -160,11 +186,12 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
     @Override
     public void onSuccess(List<ExpressInfo> list) {
         //获取expresslist成功的通知
+        IDlist.clear();
         for (int i = 0; i < list.size(); i++) {
             String expressID = list.get(i).getID();
             IDlist.add(expressID);
         }
-        adapter = new AddPackageListAdapter(getActivity(), IDlist);
+       adapter = new AddPackageListAdapter(getActivity(), IDlist);
         listView.setAdapter(adapter);
     }
 
@@ -181,9 +208,9 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
         for (int i = 0; i < list.size(); i++) {
             String packageID = list.get(i).getId();
             IDlist.add(packageID);
-            adapter = new AddPackageListAdapter(getActivity(), IDlist);
-            listView.setAdapter(adapter);
         }
+        adapter = new AddPackageListAdapter(getActivity(), IDlist);
+        listView.setAdapter(adapter);
         ExpressListPresenter.onSearchEByPackageID(DpackageID);
     }
 
@@ -206,10 +233,6 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
 
     @Override
     public void Success() {
-        IDlist.add(input.getText().toString());
-        adapter = new AddPackageListAdapter(getActivity(), IDlist);
-        listView.setAdapter(adapter);
-        input.setText("");
         Toast.makeText(getActivity(), "操作成功", Toast.LENGTH_SHORT).show();
     }
 
@@ -240,7 +263,28 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
     @Override
     public void OpenSuccess() {
         //拆包成功的通知
-        Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
+        MyDialog dialog = new MyDialog(getActivity());
+        MyDialog.SureButton button = new MyDialog.SureButton() {
+            @Override
+            public void sureButtonDo() {
+                SorterIndexFragment fragment = new SorterIndexFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.replace(R.id.fragment_container_layout, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        };
+        MyDialog.NoButton button1 = new MyDialog.NoButton() {
+            @Override
+            public void noButtonDo() {
+                getFragmentManager().popBackStack();
+            }
+        };
+        dialog.setSureButton(button);
+        dialog.setNoButton(button1);
+        dialog.showDialogWithSureAndNo( "拆包成功", "确认", "取消");
+       /* Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
                 android.R.drawable.btn_star).setTitle("确认").setMessage(
                 "拆包成功").setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
@@ -253,7 +297,7 @@ public class AddPackageListFragment extends UIFragment implements PackageListFra
                 transaction.commit();
             }
         }).create();
-        dialog1.show();
+        dialog1.show();*/
     }
     public class AddPackageListAdapter extends BaseAdapter {
         private List elist;

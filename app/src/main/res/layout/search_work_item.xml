@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="20dp"
-    android:background="@color/white"
+    android:background="@color/whitesmoke"
     android:paddingRight="20dp"
     xmlns:android="http://schemas.android.com/apk/res/android"><!-- 上圆角-->
     <LinearLayout

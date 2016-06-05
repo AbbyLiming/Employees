@@ -10,6 +10,8 @@ import android.widget.DatePicker;
 import java.util.Calendar;
 
 import com.expressba.express.R;
+import com.expressba.express.main.UIFragment;
+import com.expressba.express.myelement.MyFragmentManager;
 
 /**
  * Created by 黎明 on 2016/5/7.
@@ -36,13 +38,24 @@ public class DateDialog extends DialogFragment implements DatePickerDialog.OnDat
         _year = year;
         _month = monthOfYear + 1;
         _day = dayOfMonth;
-        SearchWorkFragment fragment = new SearchWorkFragment();
+        /*SearchWorkFragment fragment = new SearchWorkFragment();*/
         Bundle bundle = new Bundle();
         bundle.putString("key", _year + "-" + _month + "-" + _day);
-        fragment.setArguments(bundle);
-        FragmentTransaction transactio = getFragmentManager().beginTransaction();
-        transactio.replace(R.id.fragment_container_layout, fragment);
-        transactio.commit();
+        //fragment.setArguments(bundle);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        //transaction.replace(R.id.fragment_container_layout, fragment);
+        //transaction.commit();
+        UIFragment toFragment = (UIFragment) getFragmentManager().findFragmentByTag(SearchWorkFragment.class.getName());
+        if(toFragment!=null) {
+            toFragment.setBundle(bundle);
+            getFragmentManager().popBackStackImmediate();
+        }else {
+            transaction.hide(this);
+            SearchWorkFragment searchWorkFragment = new SearchWorkFragment();
+            searchWorkFragment.setArguments(bundle);
+            transaction.add(searchWorkFragment,SearchWorkFragment.class.getName());
+        }
+        transaction.commitAllowingStateLoss();
     }
 
     private String getValue() {

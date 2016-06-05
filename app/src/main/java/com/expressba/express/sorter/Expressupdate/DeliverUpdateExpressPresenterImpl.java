@@ -46,7 +46,7 @@ public class DeliverUpdateExpressPresenterImpl extends VolleyHelper implements D
         JSONObject jsonObject = new JSONObject();
         try {
             Date gettime = new Date();
-            jsonObject.put("getTime", gettime);
+            //jsonObject.put("getTime", gettime);
             jsonObject.put("isPackage", 1);
             jsonObject.put("id", express.getId());
             jsonObject.put("insuFee", express.getInsuFee());

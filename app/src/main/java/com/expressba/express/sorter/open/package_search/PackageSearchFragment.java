@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.expressba.express.main.UIFragment;
 import com.expressba.express.model.PackageInfo;
+import com.expressba.express.myelement.MyFragmentManager;
+import com.expressba.express.sorter.SorterIndex.SorterIndexFragment;
 import com.expressba.express.sorter.open.ep_search.package_list.PackageListFragment;
 import com.expressba.express.R;
 
@@ -30,6 +32,11 @@ public class PackageSearchFragment extends UIFragment implements PackageSearchFr
     private PackageSearchPresenter PackageSearchPresenter;
     private Button open;
     private ImageButton back;
+    @Override
+    protected void onBack() {
+        MyFragmentManager.popFragment(PackageSearchFragment.class,SorterIndexFragment.class,null,getFragmentManager());
+        // getFragmentManager().popBackStack();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,7 +54,7 @@ public class PackageSearchFragment extends UIFragment implements PackageSearchFr
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().popBackStack();
+                MyFragmentManager.turnFragment(PackageSearchFragment.class, SorterIndexFragment.class, null, getFragmentManager());
             }
         });
         open.setOnClickListener(new View.OnClickListener() {

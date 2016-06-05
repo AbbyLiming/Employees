@@ -14,7 +14,6 @@ public interface LoginFragmentView {
 
     boolean checkInput();
 
-    void addUserNameEdit();
 
     void onError(int whereError, String errorInfo);
 }

@@ -28,10 +28,10 @@ public class MyFragmentManager {
         //被切换的fragment标签
         String fromTag = null;
         if(fromFragmentClass!=null) {
-            fromTag = fromFragmentClass.getSimpleName();
+            fromTag = fromFragmentClass.getName();
         }
         //切换到fragment标签
-        String toTag = toFragmentClass.getSimpleName();
+        String toTag = toFragmentClass.getName();
 
         UIFragment fromFragment = (UIFragment) fm.findFragmentByTag(fromTag);
         UIFragment toFragment = (UIFragment) fm.findFragmentByTag(toTag);
@@ -90,10 +90,10 @@ public class MyFragmentManager {
         //被切换的fragment标签
         String fromTag = null;
         if(fromFragmentClass!=null) {
-            fromTag = fromFragmentClass.getSimpleName();
+            fromTag = fromFragmentClass.getName();
         }
         //切换到fragment标签
-        String toTag = toFragmentClass.getSimpleName();
+        String toTag = toFragmentClass.getName();
 
         UIFragment fromFragment = (UIFragment) fm.findFragmentByTag(fromTag);
         MyBaiduMapFragment toFragment = (MyBaiduMapFragment) fm.findFragmentByTag(toTag);
@@ -156,10 +156,10 @@ public class MyFragmentManager {
         //被切换的fragment标签
         String fromTag = null;
         if(fromFragmentClass!=null) {
-            fromTag = fromFragmentClass.getSimpleName();
+            fromTag = fromFragmentClass.getName();
         }
         //切换到fragment标签
-        String toTag = toFragmentClass.getSimpleName();
+        String toTag = toFragmentClass.getName();
 
         UIFragment fromFragment = (UIFragment) fm.findFragmentByTag(fromTag);
         UIFragment toFragment = (UIFragment) fm.findFragmentByTag(toTag);
@@ -224,7 +224,7 @@ public class MyFragmentManager {
         //如果要切换的fragment不存在，那么创建
         if(args!=null) {
             //切换到fragment标签
-            String toTag = toFragmentClass.getSimpleName();
+            String toTag = toFragmentClass.getName();
             UIFragment toFragment = (UIFragment) fm.findFragmentByTag(toTag);
             if (toFragment != null) {
                 if (args != null && !args.isEmpty()) {
@@ -244,7 +244,7 @@ public class MyFragmentManager {
         }
         //隐藏现在的Fragment
         if(fromFragmentClass!=null) {
-            UIFragment fromFragment = (UIFragment) fm.findFragmentByTag(fromFragmentClass.getSimpleName());
+            UIFragment fromFragment = (UIFragment) fm.findFragmentByTag(fromFragmentClass.getName());
             if(!fromFragment.isHidden()){
                 ft.hide(fromFragment);
                 ft.commitAllowingStateLoss();

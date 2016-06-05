@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.expressba.express.R;
 import com.expressba.express.main.UIFragment;
+import com.expressba.express.myelement.MyFragmentManager;
+import com.expressba.express.sorter.SorterIndex.SorterIndexFragment;
 
 /**
  * 用户密码修改
@@ -33,6 +35,11 @@ public class ChangePasswordFragment extends UIFragment implements ChangePassword
         passwordEdit2 = (EditText) view.findViewById(R.id.user_change_password_again);
         changePassworPresenter = new ChangePassworPresenterImpl(getActivity(),this);
         return view;
+    }
+    @Override
+    protected void onBack() {
+        MyFragmentManager.popFragment(ChangePasswordFragment.class,SorterIndexFragment.class,null,getFragmentManager());
+        // getFragmentManager().popBackStack();
     }
 
     @Override

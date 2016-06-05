@@ -12,10 +12,6 @@ public interface SorterMeFragmentView {
 
     void toMyComplaint();
 
-    void toUserSendAddress();
-
-    void toUserReceiveAddress();
-
     void toTelChange();
 
     void toPasswordChange();

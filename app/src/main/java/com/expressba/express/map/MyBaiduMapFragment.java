@@ -70,6 +70,11 @@ public class MyBaiduMapFragment extends UIFragment implements MyBaiduMapView{
     }
 
     @Override
+    protected void onBack() {
+        getFragmentManager().popBackStack();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //SDKInitializer.initialize(getActivity().getApplicationContext());//初始化传入application
         View view = inflater.inflate(R.layout.baidu_map,container,false);

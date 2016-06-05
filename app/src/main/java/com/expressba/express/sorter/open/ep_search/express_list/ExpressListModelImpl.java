@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.expressba.express.main.MyApplication;
 import com.expressba.express.model.ExpressInfo;
 import com.expressba.express.net.VolleyHelper;
 import com.expressba.express.R;
@@ -49,8 +48,8 @@ public class ExpressListModelImpl extends VolleyHelper implements ExpressListMod
     public void onDataReceive(Object jsonOrArray) {
         JSONArray jsonArray = (JSONArray) jsonOrArray;
         List<ExpressInfo> list = new ArrayList<>();
+        ExpressInfo p = new ExpressInfo();
         for (int i = 0; i < jsonArray.length(); i++) {
-            ExpressInfo p = new ExpressInfo();
             try {
                 JSONObject object1 = (JSONObject) jsonArray.get(i);
                 p.setID(object1.getString("ID"));
@@ -58,16 +57,15 @@ public class ExpressListModelImpl extends VolleyHelper implements ExpressListMod
                 p.setRtel(object1.getString("rtel"));
                 p.setRaddinfo(object1.getString("raddinfo"));
                 p.setRadd(object1.getString("radd"));
-                //String gettime = object1.getString("getTime").substring(0, 10);
-                //p.setGetTime(gettime);
+                String gettime = object1.getString("getTime").substring(0, 10);
+                p.setGetTime(gettime);
                 list.add(p);
             } catch (JSONException e) {
                 e.printStackTrace();
                 ExpressListPresenter.onExpressListFail("error");
             }
         }
+
         ExpressListPresenter.onSuccess(list);
     }
-
-
 }

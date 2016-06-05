@@ -22,6 +22,8 @@ import java.util.List;
 
 import com.expressba.express.main.UIFragment;
 import com.expressba.express.model.Package;
+import com.expressba.express.myelement.MyDialog;
+import com.expressba.express.myelement.MyFragmentManager;
 import com.expressba.express.sorter.open.ep_search.express_list.ExpressListFragment;
 import com.expressba.express.sorter.SorterIndex.SorterIndexFragment;
 import com.expressba.express.R;
@@ -43,6 +45,12 @@ public class PackageListFragment extends UIFragment implements PackageListFragme
     private PackageListAdapter adp;
 
     @Override
+    protected void onBack() {
+        MyFragmentManager.popFragment(PackageListFragment.class,SorterIndexFragment.class,null,getFragmentManager());
+        // getFragmentManager().popBackStack();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.ep_fragment, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
@@ -56,7 +64,8 @@ public class PackageListFragment extends UIFragment implements PackageListFragme
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().popBackStack();
+                MyFragmentManager.turnFragment(PackageListFragment.class, SorterIndexFragment.class, null, getFragmentManager());
+               // getFragmentManager().popBackStack();
             }
         });
         PackageListPresenter = new PackageListPresenterImpl(this);
@@ -107,7 +116,27 @@ public class PackageListFragment extends UIFragment implements PackageListFragme
 
     @Override
     public void OpenSuccess() {
-        Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
+        MyDialog dialog = new MyDialog(getActivity());
+        MyDialog.SureButton button = new MyDialog.SureButton() {
+            @Override
+            public void sureButtonDo() {
+                SorterIndexFragment fragment = new SorterIndexFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.replace(R.id.fragment_container_layout, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        };
+        MyDialog.NoButton button1 = new MyDialog.NoButton() {
+            @Override
+            public void noButtonDo() {
+
+            }
+        };
+        dialog.setSureButton(button);
+        dialog.setNoButton(button1);
+        dialog.showDialogWithSureAndNo( " 拆包成功", "确认", "取消");      /*  Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
                 android.R.drawable.btn_star).setTitle("确认").setMessage(
                 "拆包成功").setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
@@ -120,7 +149,7 @@ public class PackageListFragment extends UIFragment implements PackageListFragme
                 transaction.commit();
             }
         }).create();
-        dialog1.show();
+        dialog1.show();*/
     }
 
     @Override

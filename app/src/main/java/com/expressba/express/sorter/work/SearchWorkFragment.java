@@ -1,10 +1,11 @@
 package com.expressba.express.sorter.work;
 
 import android.app.DialogFragment;
-import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,9 @@ import java.util.List;
 import com.expressba.express.main.MyApplication;
 import com.expressba.express.main.UIFragment;
 import com.expressba.express.model.ExpressEntity;
-import com.expressba.express.sorter.ReceiverInfo.ReceiverInfoFragment;
+import com.expressba.express.myelement.MyFragmentManager;
 import com.expressba.express.R;
+import com.expressba.express.sorter.SorterIndex.SorterIndexFragment;
 
 /**
  * Created by 黎明 on 2016/5/7.
@@ -30,7 +32,7 @@ public class SearchWorkFragment extends UIFragment implements SearchWorkFragment
     private ExpressListAdapter adapter;
     private ListView listView;
     private EditText input;
-    private ImageButton search;
+    private ImageButton search,back;
     private SearchWorkPresenter presenter;
     private int EmployeesID;
     private static int DAY;
@@ -41,16 +43,28 @@ public class SearchWorkFragment extends UIFragment implements SearchWorkFragment
         listView = (ListView) view.findViewById(R.id.listview);
         input = (EditText) view.findViewById(R.id.index_top_bar_input);
         input.setHint("请输入查询天数");
+        back=(ImageButton)view.findViewById(R.id.index_top_bar_camera);
+        back.setImageResource(R.mipmap.left_arrow);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // MyFragmentManager.turnFragment(SearchWorkFragment.class,SorterIndexFragment.class,null,getFragmentManager());
+                MyFragmentManager.popFragment(SearchWorkFragment.class,null,null,getFragmentManager());
+            }
+        });
         search = (ImageButton) view.findViewById(R.id.index_top_bar_message);
         search.setImageResource(R.mipmap.search);
         search.setOnClickListener(this);
         presenter = new SearchWorkPresenterImpl(getActivity(), this);
         EmployeesID = ((MyApplication) getActivity().getApplication()).getEmployeesInfo().getId();
-        if (getArguments() != null) {
-            String text = getArguments().getString("key");
-            presenter.searchWork(EmployeesID, text, DAY);
-        }
         return view;
+    }
+
+    @Override
+    protected void handlerIfBundle(Bundle bundle) {
+        super.handlerIfBundle(bundle);
+        String text = bundle.getString("key");
+        presenter.searchWork(EmployeesID, text, DAY);
     }
 
     @Override
@@ -63,19 +77,29 @@ public class SearchWorkFragment extends UIFragment implements SearchWorkFragment
         adapter = new ExpressListAdapter(getActivity(), list);
         listView.setAdapter(adapter);
     }
-
+    @Override
+    protected void onBack() {
+       MyFragmentManager.popFragment(SearchWorkFragment.class,null,null,getFragmentManager());
+       //  getFragmentManager().popBackStack();
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.back:
-                getFragmentManager().popBackStack();
-                break;
-            case R.id.index_top_bar_message:
-                if (input.getText().toString() != null) {
+        case R.id.index_top_bar_message:
+                if (!TextUtils.isEmpty(input.getText())) {
                     DialogFragment fragment = new DateDialog();
                     try {
                         DAY = Integer.parseInt(input.getText().toString());
-                        fragment.show(getFragmentManager(), "datePicker");
+                        FragmentManager fm = getFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        if(!fragment.isAdded()) {
+                            ft.add(fragment, DialogFragment.class.getName());
+                        }else{
+                            ft.show(fragment);
+                        }
+                        /*fragment.show(getFragmentManager(), "datePicker");*/
+                        ft.addToBackStack(getClass().getName());
+                        ft.commitAllowingStateLoss();
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                         Toast.makeText(getActivity(), "输入不合法", Toast.LENGTH_SHORT).show();
@@ -131,11 +155,11 @@ public class SearchWorkFragment extends UIFragment implements SearchWorkFragment
             }
             view.ID.setText(elist.get(position).getId());
             view.gettime.setText(elist.get(position).getGetTime());
-            view.gettime.setText(elist.get(position).getOutTime());
+            view.outtime.setText(elist.get(position).getOutTime());
             view.info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ReceiverInfoFragment fragment = new ReceiverInfoFragment();
+                   /* ReceiverInfoFragment fragment = new ReceiverInfoFragment();
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     Bundle bundle = new Bundle();
@@ -143,7 +167,7 @@ public class SearchWorkFragment extends UIFragment implements SearchWorkFragment
                     fragment.setArguments(bundle);
                     transaction.replace(R.id.fragment_container_layout, fragment);
                     transaction.addToBackStack("ExpressListFragment");
-                    transaction.commit();
+                    transaction.commit();*/
                 }
             });
             return convertView;

@@ -42,13 +42,20 @@ public class PackageSearchModelImpl extends VolleyHelper implements PackageSearc
         try {
             PackageInfo packageInfo = new PackageInfo();
           //  String closeTime=jsonObject.getString("closeTime");
+            if(jsonObject.getString("packageFrom").equals(jsonObject.getString("packageTo")))
+            {
+                packageInfo.setPackageFrom(" ");
+                packageInfo.setPackageTo("当前站点");
+            }
+            else
+            {
+                packageInfo.setPackageFrom(jsonObject.getString("packageFrom"));
+                packageInfo.setPackageTo(jsonObject.getString("packageTo"));
+            }
             packageInfo.setCloseTime(jsonObject.getString("closeTime").substring(0, 10));
-            packageInfo.setPackageFrom(jsonObject.getString("packageFrom"));
-            packageInfo.setPackageTo(jsonObject.getString("packageTo"));
             packageInfo.setId(jsonObject.getString("id"));
             packageInfo.setEmployeesID(Integer.parseInt(jsonObject.getString("employeesID")));
             packageInfo.setEmployeesName(jsonObject.getString("employeesName"));
-
             package_searchPresenter.onSuccess(packageInfo);
         } catch (JSONException e) {
             e.printStackTrace();

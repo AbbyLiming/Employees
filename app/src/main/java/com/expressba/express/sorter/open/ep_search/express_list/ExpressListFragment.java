@@ -1,16 +1,9 @@
 package com.expressba.express.sorter.open.ep_search.express_list;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
-
-import android.app.ListFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +20,8 @@ import java.util.List;
 import com.expressba.express.main.UIFragment;
 import com.expressba.express.model.ExpressInfo;
 import com.expressba.express.model.Package;
+import com.expressba.express.myelement.MyDialog;
+import com.expressba.express.myelement.MyFragmentManager;
 import com.expressba.express.sorter.ReceiverInfo.ReceiverInfoFragment;
 import com.expressba.express.sorter.open.ep_search.package_list.OpenPackagePresenter;
 import com.expressba.express.sorter.open.ep_search.package_list.OpenPackagePresenterImpl;
@@ -34,6 +29,7 @@ import com.expressba.express.sorter.open.ep_search.package_list.PackageListFragm
 import com.expressba.express.sorter.SorterIndex.SorterIndexFragment;
 import com.expressba.express.sorter.open.ep_search.package_list.PackageListFragmentView;
 import com.expressba.express.R;
+import com.expressba.express.user.password.ChangePasswordFragment;
 
 /**
  * Created by 黎明 on 2016/4/26.
@@ -62,7 +58,8 @@ public class ExpressListFragment extends UIFragment implements ExpressListFragme
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().popBackStack();
+                MyFragmentManager.turnFragment(ExpressListFragment.class, SorterIndexFragment.class, null, getFragmentManager());
+               // getFragmentManager().popBackStack();
             }
         });
         listView = (ListView) view.findViewById(R.id.listView);
@@ -101,6 +98,12 @@ public class ExpressListFragment extends UIFragment implements ExpressListFragme
     }
 
     @Override
+    protected void onBack() {
+        MyFragmentManager.popFragment(ExpressListFragment.class,SorterIndexFragment.class,null,getFragmentManager());
+        // getFragmentManager().popBackStack();
+    }
+
+    @Override
     public Activity getTheActivity() {
         return getActivity();
     }
@@ -123,7 +126,7 @@ public class ExpressListFragment extends UIFragment implements ExpressListFragme
 
     @Override
     public void OpenSuccess() {
-        Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
+       /* Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
                 android.R.drawable.btn_star).setTitle("确认").setMessage(
                 "拆包成功").setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
@@ -136,7 +139,28 @@ public class ExpressListFragment extends UIFragment implements ExpressListFragme
                 transaction.commit();
             }
         }).create();
-        dialog1.show();
+        dialog1.show();*/
+        MyDialog dialog = new MyDialog(getActivity());
+        MyDialog.SureButton button = new MyDialog.SureButton() {
+            @Override
+            public void sureButtonDo() {
+                SorterIndexFragment fragment = new SorterIndexFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.replace(R.id.fragment_container_layout, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        };
+        MyDialog.NoButton button1 = new MyDialog.NoButton() {
+            @Override
+            public void noButtonDo() {
+
+            }
+        };
+        dialog.setSureButton(button);
+        dialog.setNoButton(button1);
+        dialog.showDialogWithSureAndNo( " 拆包成功", "确认", "取消");
 
     }
 

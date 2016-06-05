@@ -6,7 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.expressba.express.main.MyApplication;
@@ -31,14 +34,29 @@ public class SearchWorkPresenterImpl extends VolleyHelper implements SearchWorkP
     @Override
     public void onDataReceive(Object jsonOrArray) {
         JSONArray jsonArray = (JSONArray) jsonOrArray;
-        ExpressEntity expressEntity = new ExpressEntity();
         List<ExpressEntity> list = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
+            ExpressEntity expressEntity = new ExpressEntity();
             try {
                 JSONObject object = (JSONObject) jsonArray.get(i);
                 expressEntity.setId(object.getString("id"));
-                expressEntity.setGetTime(object.getString("getTime"));
-                expressEntity.setOutTime(object.getString("outTime"));
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date date1 = null;
+                Date date3 = null;
+                try {
+                    try {
+                        date1 = sdf.parse(object.getString("getTime"));
+                        date3 = sdf.parse(object.getString("outTime"));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    String date4 = sdf.format(date3);
+                    expressEntity.setOutTime(date4);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String date2 = sdf.format(date1);
+                expressEntity.setGetTime(date2);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -49,7 +67,7 @@ public class SearchWorkPresenterImpl extends VolleyHelper implements SearchWorkP
 
     @Override
     public void searchWork(int EmployeesID, String start, int day) {
-        turl += "/REST/Domain/getWork/employeeId/" + EmployeesID + "/starttime/" + start + "/days/" + day ;
+        turl += "/REST/Domain/getWork/employeeId/" + EmployeesID + "/starttime/" + start + "/days/" + day;
         try {
             doJsonArray(turl, VolleyHelper.GET, null);
         } catch (Exception e) {

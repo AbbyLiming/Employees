@@ -140,7 +140,7 @@ public class MyHistoryTrace {
     /**
      * 停止轨迹追踪服务结果回调接口
      */
-    interface StopTraceInterface {
+    public interface StopTraceInterface {
         void stopTraceSuccess();
         void stopTraceFail(int arg0, String arg1);
     }

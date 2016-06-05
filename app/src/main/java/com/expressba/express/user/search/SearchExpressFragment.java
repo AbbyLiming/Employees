@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import com.expressba.express.main.UIFragment;
 import com.expressba.express.model.ExpressSearchInfo;
 import com.expressba.express.R;
+import com.expressba.express.myelement.MyFragmentManager;
+import com.expressba.express.sorter.SorterIndex.SorterIndexFragment;
 
 /**
  * Created by songchao on 16/5/1.
@@ -61,6 +63,11 @@ public class SearchExpressFragment extends UIFragment implements View.OnClickLis
 
         //onRequestSuccess();
         return view;
+    }
+    @Override
+    protected void onBack() {
+        MyFragmentManager.popFragment(SearchExpressFragment.class,SorterIndexFragment.class,null,getFragmentManager());
+        // getFragmentManager().popBackStack();
     }
 
 

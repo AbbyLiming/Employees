@@ -15,7 +15,8 @@ import android.widget.Toast;
 import com.expressba.express.main.UIFragment;
 import com.expressba.express.model.ExpressInfo;
 import com.expressba.express.R;
-
+import com.expressba.express.myelement.MyFragmentManager;
+import com.expressba.express.sorter.SorterIndex.SorterIndexFragment;
 
 /**
  * Created by 黎明 on 2016/4/30.
@@ -32,13 +33,19 @@ public class ExpressUpdateFragment extends UIFragment implements ExpressUpdateFr
     public static String ID;
 
     @Override
+    protected void onBack() {
+        MyFragmentManager.popFragment(ExpressUpdateFragment.class,SorterIndexFragment.class,null,getFragmentManager());
+        // getFragmentManager().popBackStack();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         presenter = new ExpressUpdatePresenterImpl(getActivity(), this);
         if (getArguments().getString("ID") != null) {
             ID = getArguments().getString("ID");
             presenter.getExpressInfoByID(ID);
-        }
-        else getFragmentManager().popBackStack();
+        } else
+            MyFragmentManager.turnFragment(ExpressUpdateFragment.class, SorterIndexFragment.class, null, getFragmentManager());
         View view = inflater.inflate(R.layout.express_send_edit, container, false);
         title = (TextView) view.findViewById(R.id.top_bar_center_text);
         title.setText("快件信息");
@@ -86,12 +93,12 @@ public class ExpressUpdateFragment extends UIFragment implements ExpressUpdateFr
     }
 
     public void onback() {
-        getFragmentManager().popBackStack();
+        MyFragmentManager.turnFragment(ExpressUpdateFragment.class, SorterIndexFragment.class, null, getFragmentManager());
     }
 
     @Override
     public void onFail(String errorMessage) {
-        getFragmentManager().popBackStack();
+        MyFragmentManager.turnFragment(ExpressUpdateFragment.class, SorterIndexFragment.class, null, getFragmentManager());
         Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
     }
 

@@ -15,13 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.trace.T;
 import com.expressba.express.main.MyApplication;
 import com.expressba.express.main.UIFragment;
-import com.expressba.express.map.MyHistoryTrace;
 import com.expressba.express.model.EmployeesEntity;
 import com.expressba.express.model.PackageInfo;
 import com.expressba.express.model.UserAddress;
+import com.expressba.express.myelement.MyDialog;
 import com.expressba.express.myelement.MyFragmentManager;
 import com.expressba.express.sorter.SorterIndex.SorterIndexFragment;
 import com.expressba.express.sorter.close.add_package_list.AddPackageListFragment;
@@ -46,7 +45,11 @@ public class NewPackageInfoFragment extends UIFragment implements NewPackageInfo
     private static String packageID;
     private EditText toWhereID;
 
-
+    @Override
+    protected void onBack() {
+        MyFragmentManager.popFragment(NewPackageInfoFragment.class,SorterIndexFragment.class,null,getFragmentManager());
+        // getFragmentManager().popBackStack();
+    }
     @Override
     public void setBundle(Bundle bundle) {
         super.setBundle(bundle);
@@ -78,7 +81,7 @@ public class NewPackageInfoFragment extends UIFragment implements NewPackageInfo
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().popBackStack();
+                MyFragmentManager.turnFragment(NewPackageInfoFragment.class, SorterIndexFragment.class, null, getFragmentManager());
             }
         });
         title.setText("请选取目的地地址");
@@ -125,7 +128,7 @@ public class NewPackageInfoFragment extends UIFragment implements NewPackageInfo
         ID.setText(packageInfo.getId());
         time.setText(packageInfo.getCloseTime());
         packageID = packageInfo.getId();
-        Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
+       /* Dialog dialog1 = new AlertDialog.Builder(getActivity()).setIcon(
                 android.R.drawable.btn_star).setTitle("确认").setMessage(
                 "创建成功包裹ID为" + packageID + "是否继续添加包裹或快件?").setPositiveButton("添加", new DialogInterface.OnClickListener() {
             @Override
@@ -151,6 +154,35 @@ public class NewPackageInfoFragment extends UIFragment implements NewPackageInfo
                 transaction.commit();
             }
         }).create();
-        dialog1.show();
+        dialog1.show();*/
+        MyDialog dialog = new MyDialog(getActivity());
+        MyDialog.SureButton button = new MyDialog.SureButton() {
+            @Override
+            public void sureButtonDo() {
+                AddPackageListFragment fragment = new AddPackageListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("packageID", packageID);
+                fragment.setArguments(bundle);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.replace(R.id.fragment_container_layout, fragment);
+                transaction.addToBackStack("NewPackageInfoFragment");
+                transaction.commit();
+            }
+        };
+        MyDialog.NoButton button1 = new MyDialog.NoButton() {
+            @Override
+            public void noButtonDo() {
+                SorterIndexFragment fragment = new SorterIndexFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.replace(R.id.fragment_container_layout, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        };
+        dialog.setSureButton(button);
+        dialog.setNoButton(button1);
+        dialog.showDialogWithSureAndNo( "创建成功包裹ID为" + packageID + "是否继续添加包裹或快件?", "确认", "取消");
     }
 }

@@ -57,8 +57,10 @@ public class PackageListModelImpl extends VolleyHelper implements PackageListMod
                 list.add(p);
             } catch (JSONException e) {
                 e.printStackTrace();
+                PackageListPresenter.onFail("error");
             }
         }
+
         PackageListPresenter.onPackageSuccess(list);
     }
 }

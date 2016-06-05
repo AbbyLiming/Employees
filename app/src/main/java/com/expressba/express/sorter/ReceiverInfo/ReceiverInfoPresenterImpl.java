@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import com.expressba.express.net.VolleyHelper;
 import com.expressba.express.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -32,7 +33,8 @@ public class ReceiverInfoPresenterImpl extends VolleyHelper implements ReceiverI
     @Override
     public void ReceiveExpress(String ID) {
         Date time=new Date();
-        url+="/expressId/"+ID+"/outTime/"+time;
+        String outTime= (new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss")).format(time);
+        url+="/expressId/"+ID+"/outTime/"+outTime;
         try {
             doJson(url,VolleyHelper.GET,null);
         } catch (Exception e) {

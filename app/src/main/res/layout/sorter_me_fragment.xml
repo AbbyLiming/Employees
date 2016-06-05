@@ -5,73 +5,6 @@
     android:background="@color/white"
     android:orientation="vertical">
     <include layout="@layout/top_bar" />
-    <RelativeLayout
-        android:id="@+id/user_receive_address"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="2px"
-        android:background="#ffffff"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
-        <ImageView
-            android:id="@+id/send_address_icon"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/about_me" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/send_address_icon"
-            android:gravity="center"
-            android:text="@string/send_address" />
-
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="25dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/right" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/user_send_address"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="2px"
-        android:background="#ffffff"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
-        <ImageView
-            android:id="@+id/receive_address_icon"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/about_me" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/receive_address_icon"
-            android:gravity="center"
-            android:text="@string/receive_address" />
-
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="25dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/right" />
-    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/user_tel"
@@ -142,6 +75,75 @@
             android:src="@mipmap/right" />
     </RelativeLayout>
 
+
+    <RelativeLayout
+        android:id="@+id/my_complaint"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="2px"
+        android:background="#ffffff"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:id="@+id/user_info_icon9"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/complain" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/user_info_icon9"
+            android:gravity="center"
+            android:text="上传轨迹" />
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/right" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/user_work_log"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="2px"
+        android:background="#ffffff"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:id="@+id/user_info_icon4"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/complain" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/user_info_icon4"
+            android:gravity="center"
+            android:text="工作量查询" />
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/right" />
+    </RelativeLayout>
+
+
     <RelativeLayout
         android:id="@+id/send_record"
         android:layout_width="match_parent"
@@ -210,113 +212,10 @@
             android:layout_centerInParent="true"
             android:src="@mipmap/right" />
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/my_complaint"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="2px"
-        android:background="#ffffff"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
-        <ImageView
-            android:id="@+id/user_info_icon9"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/complain" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/user_info_icon9"
-            android:gravity="center"
-            android:text="我的投诉" />
-
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="25dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/right" />
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/user_work_log"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="2px"
-        android:background="#ffffff"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
-        <ImageView
-            android:id="@+id/user_info_icon4"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/complain" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/user_info_icon4"
-            android:gravity="center"
-            android:text="工作量查询" />
-
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="25dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/right" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/about_soft"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="2px"
-        android:background="#ffffff"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
-
-        <ImageView
-            android:id="@+id/user_info_icon3"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-
-            android:layout_marginRight="10dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/about_soft" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/user_info_icon3"
-            android:gravity="center"
-            android:text="签收" />
-
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="25dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/right" />
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="150dp"
         android:gravity="center"
         android:orientation="horizontal">
 

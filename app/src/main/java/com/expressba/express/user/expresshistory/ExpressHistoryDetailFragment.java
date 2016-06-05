@@ -24,6 +24,11 @@ public class ExpressHistoryDetailFragment extends UIFragment implements View.OnC
         view.findViewById(R.id.top_bar_left_img).setOnClickListener(this);
         return view;
     }
+    @Override
+    protected void onBack() {
+        getFragmentManager().popBackStack();
+    }
+
 
     /**
      * 静态工厂方法实例化fragment，保证所需bundle参数不会出错

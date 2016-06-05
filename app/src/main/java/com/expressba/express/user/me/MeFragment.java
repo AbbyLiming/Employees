@@ -25,6 +25,10 @@ import com.expressba.express.user.telephone.ChangeTelFragment;
 public class MeFragment extends UIFragment implements MeView,View.OnClickListener{
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
+    @Override
+    protected void onBack() {
+        getFragmentManager().popBackStack();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

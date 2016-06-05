@@ -57,6 +57,10 @@ public class AddressEditFragment extends UIFragment implements View.OnClickListe
     private Integer cityPosition = 0;
     private Integer regionPosition = 0;
     private Boolean isdefault = true;//判断用户是否修改了地址spinner
+    @Override
+    protected void onBack() {
+        getFragmentManager().popBackStack();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

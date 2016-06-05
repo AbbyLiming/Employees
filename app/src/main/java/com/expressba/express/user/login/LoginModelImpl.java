@@ -113,7 +113,12 @@ public class LoginModelImpl extends VolleyHelper implements LoginModel {
                     case "true":
                         this.name = jsonObject.getString("name");//登陆成功后存储必要用户信息
                         application.getEmployeesInfo().setId(jsonObject.getInt("id"));
-                        // application.getEmployeesInfo().setId(7);
+                        try {
+                            application.getEmployeesInfo().setSendPackageId(jsonObject.getString("sendPackageId"));
+                            application.getEmployeesInfo().setRecvPackageId(jsonObject.getString("recvPackageId"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         application.getEmployeesInfo().setName(this.name);
                         application.getEmployeesInfo().setTelephone(telephone);
                         application.getEmployeesInfo().setPassword(mD5Password);

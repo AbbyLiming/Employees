@@ -36,6 +36,10 @@ public class ExpressHistoryFragment extends UIFragment implements ExpressHistory
         startGetData();//开始获取后台数据
         return view;
     }
+    @Override
+    protected void onBack() {
+        getFragmentManager().popBackStack();
+    }
 
     private void init(View view){
         Bundle bundle = getArguments();

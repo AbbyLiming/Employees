@@ -1,6 +1,4 @@
 package com.expressba.express.user.info;
-
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,4 +20,9 @@ public class UserInfoFragment extends UIFragment implements UserInfoView,View.On
     public void onClick(View v) {
 
     }
+    @Override
+    protected void onBack() {
+        getFragmentManager().popBackStack();
+    }
+
 }

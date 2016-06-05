@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.expressba.express.main.MyApplication;
+import com.expressba.express.model.EmployeesEntity;
 import com.expressba.express.model.UserInfo;
 import com.expressba.express.net.VolleyHelper;
 import com.expressba.express.R;
@@ -18,7 +19,7 @@ public class ChangeTelPresenterImpl extends VolleyHelper implements ChangeTelPre
 
     ChangeTelView changeTelView;
     String changeTelUrl;
-    UserInfo oldUserInfo;
+    EmployeesEntity oldUserInfo;
     MyApplication application;
     String newTelephone;
 
@@ -26,9 +27,9 @@ public class ChangeTelPresenterImpl extends VolleyHelper implements ChangeTelPre
         super(context);
         this.changeTelView = changeTelView;
         application = (MyApplication)context.getApplication();
-        oldUserInfo = application.getUserInfo();
+        oldUserInfo = application.getEmployeesInfo();
         changeTelUrl = context.getResources().getString(R.string.base_url)+
-                context.getResources().getString(R.string.user_change_tel);
+                context.getResources().getString(R.string.employee_change_tel);
     }
 
     /**
@@ -47,12 +48,16 @@ public class ChangeTelPresenterImpl extends VolleyHelper implements ChangeTelPre
         JSONObject jsonObject = (JSONObject) jsonOrArray;
         try {
             if(jsonObject.getString("changetel").equals("true")){
-                application.getUserInfo().setTelephone(newTelephone);
+                application.getEmployeesInfo().setTelephone(newTelephone);
                 changeTelView.onSubmitSuccess();
             }else if(jsonObject.getString("changetel").equals("false")){
                 changeTelView.onError("修改失败，请重试");
             }else if(jsonObject.getString("changetel").equals("deny1")){
                 changeTelView.onError("手机号已经被人注册,请登录");
+            }
+            else if(jsonObject.getString("changetel").equals("deny2"))
+            {
+                changeTelView.onError("未根据旧手机号找到用户信息");
             }
         } catch (JSONException e) {
             e.printStackTrace();

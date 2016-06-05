@@ -159,9 +159,9 @@
     <string name="can_not_parse_json">the string can not parse to json</string>
 
 
-    <!--软件中所有的请求的urlhttp://182.254.214.97:8080/ExTrace_Server-->
-    <string name="base_url">http://192.168.1.105:8080</string>
+    <!--软件中所有的请求的url <string name="base_url"></string>-->
 
+    <string name="base_url">http://182.254.214.97:8080/ExTrace_Server</string>
     <string name="login_send">/REST/Domain/login</string>
     <string name="login_send_employee">/REST/Domain/loginByEmployee</string>
     <string name="register_send">/REST/Domain/register</string>
@@ -175,8 +175,9 @@
     <string name="address_submit_new">/REST/Misc/newAddress</string><!--新增的收货或者发货地址-->
     <string name="address_delete">/REST/Misc/deleteAddress/</string><!--删除地址url，后面加上用户id-->
     <string name="user_change_tel">/REST/Domain/changeTel/old/{oldtel}/new/{newtel}</string><!--修改用户手机号url-->
+    <string name="employee_change_tel">/REST/Domain/changeTelByEmp/old/{oldtel}/new/{newtel}</string>
     <string name="user_change_password">/REST/Domain/changePwd/tel/{tel}/{pwdold}/{pwdnew}</string><!--修改用户密码-->
-
+    <string name="employee_change_password">/REST/Domain/changePwdByEmp/tel/{tel}/{pwdold}/{pwdnew}</string>
     <string name="getExpressInfo_ByTel">/REST/Domain/getExpressInfoByTel/</string>
     <string name="getExpressInfo_ById">/REST/Domain/getExpressInfoById/</string><!--根据快递单号查询快件-->
     <string name="SendExpress">/REST/Domain/prepareSendExpress/customerId/{customerId}/sendAddressId/{sendAddressId}/recAddressId/{recAddressId}</string><!--新建快件-->
@@ -193,5 +194,7 @@
     <string name="receive_address">发货地址</string>
     <string name="tel">电话</string>
     <string name="password">密码</string>
+    <string name="telEdit">1553839885</string>
+    <string name="passwordEdit">123456</string>
 
 </resources>

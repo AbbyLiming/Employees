@@ -5,6 +5,6 @@ package com.expressba.express.sorter.ReceiverInfo;
  */
 public interface ReceiverInfoFragmentView {
     void onFail(String errorMessage);
-
+    void onSuccess(String picture);
     void onSuccess();
 }

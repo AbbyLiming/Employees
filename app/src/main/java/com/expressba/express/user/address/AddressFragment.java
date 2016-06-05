@@ -68,6 +68,10 @@ public class AddressFragment extends UIFragment implements AddressView, View.OnC
             }
         }
     }
+    @Override
+    protected void onBack() {
+        getFragmentManager().popBackStack();
+    }
 
     @Override
     public void onClick(View v) {

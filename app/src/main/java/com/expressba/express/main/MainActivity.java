@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import com.expressba.express.R;
 import com.expressba.express.myelement.MyFragmentManager;
-import com.expressba.express.sorter.Expressupdate.DeliverUpdateExpressFragment;
 import com.expressba.express.sorter.SorterIndex.SorterIndexFragment;
 
 
